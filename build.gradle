@@ -19,15 +19,14 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-tx-hibernate")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.sql:micronaut-hibernate-jpa")
-    implementation('org.xerial:sqlite-jdbc:3.41.2.2')
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    implementation("io.micronaut:micronaut-validation:3.10.3")
     implementation("org.projectlombok:lombok")
     implementation("io.micronaut:micronaut-validation")
     compileOnly("io.micronaut:micronaut-http-client")
-    compileOnly("org.projectlombok:lombok")
     runtimeOnly("ch.qos.logback:logback-classic")
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("com.h2database:h2:2.2.220")
     testImplementation("io.micronaut:micronaut-http-client")
 }
 
