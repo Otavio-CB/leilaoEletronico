@@ -2,6 +2,8 @@ package br.gov.sp.fatec.lp2;
 
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller("/veiculos")
@@ -9,6 +11,9 @@ public class VeiculoController {
 
     @Inject
     VeiculoRepository veiculoRepository;
+
+    @Inject
+    LeilaoRepository leilaoRepository;
 
     @Post
     public Veiculo criarVeiculo(@Body Veiculo veiculo) {
@@ -29,5 +34,23 @@ public class VeiculoController {
     @Delete("/{id}")
     public void removerVeiculo(@PathVariable Long id) {
         veiculoRepository.deleteById(id);
+    }
+
+    @Put("/{id}/reassociar/{novoLeilaoId}")
+    public Veiculo reassociarVeiculo(@PathVariable Long id, @PathVariable Long novoLeilaoId) {
+        Veiculo veiculo = veiculoRepository.findById(id).orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
+
+        if (veiculo.isVendido()) {
+            throw new RuntimeException("Não é possível desassociar um veículo que já foi vendido.");
+        }
+
+        Leilao novoLeilao = leilaoRepository.findById(novoLeilaoId).orElseThrow(() -> new RuntimeException("Novo leilão não encontrado"));
+
+        if (novoLeilao.getDataOcorrencia().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("O novo leilão deve ocorrer no futuro.");
+        }
+
+        veiculo.setLeilao(novoLeilao);
+        return veiculoRepository.update(veiculo);
     }
 }

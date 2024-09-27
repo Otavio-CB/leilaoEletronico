@@ -24,4 +24,8 @@ public class Leilao {
 
     @OneToMany
     private List<Veiculo> veiculos;
+
+    @ManyToMany
+    @JoinTable(name = "leilao_instituicao_financeira", joinColumns = @JoinColumn(name = "leilao_id"), inverseJoinColumns = @JoinColumn(name = "instituicao_financeira_id"))
+    private List<InstituicaoFinanceira> instituicoesFinanceiras;
 }
