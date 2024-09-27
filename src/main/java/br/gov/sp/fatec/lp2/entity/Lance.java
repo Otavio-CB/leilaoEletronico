@@ -1,4 +1,4 @@
-package br.gov.sp.fatec.lp2;
+package br.gov.sp.fatec.lp2.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

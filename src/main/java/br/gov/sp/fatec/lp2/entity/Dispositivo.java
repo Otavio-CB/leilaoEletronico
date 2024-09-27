@@ -1,18 +1,19 @@
-package br.gov.sp.fatec.lp2;
+package br.gov.sp.fatec.lp2.entity;
+
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
-public class Veiculo {
+public class Dispositivo {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String modelo;
-    private String marca;
+    private String nome;
     private String tipo;
+    private String descricao;
     private Double valorInicial;
 
     private boolean vendido;

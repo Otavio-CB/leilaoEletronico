@@ -1,5 +1,9 @@
-package br.gov.sp.fatec.lp2;
+package br.gov.sp.fatec.lp2.controller;
 
+import br.gov.sp.fatec.lp2.repository.DispositivoRepository;
+import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
+import br.gov.sp.fatec.lp2.entity.Dispositivo;
+import br.gov.sp.fatec.lp2.entity.Leilao;
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 

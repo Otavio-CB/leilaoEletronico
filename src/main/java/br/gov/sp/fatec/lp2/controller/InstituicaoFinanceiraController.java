@@ -1,5 +1,7 @@
-package br.gov.sp.fatec.lp2;
+package br.gov.sp.fatec.lp2.controller;
 
+import br.gov.sp.fatec.lp2.entity.InstituicaoFinanceira;
+import br.gov.sp.fatec.lp2.repository.InstituicaoFinanceiraRepository;
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 
