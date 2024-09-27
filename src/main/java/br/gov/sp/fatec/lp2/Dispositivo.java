@@ -1,10 +1,7 @@
 package br.gov.sp.fatec.lp2;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -18,4 +15,9 @@ public class Dispositivo {
     private String tipo;
     private String descricao;
     private Double valorInicial;
+
+    private boolean vendido;
+
+    @ManyToOne
+    private Leilao leilao;
 }
