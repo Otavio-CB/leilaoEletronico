@@ -17,6 +17,7 @@ dependencies {
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
     annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen")
     implementation("io.micronaut.data:micronaut-data-tx-hibernate")
+    implementation("org.modelmapper:modelmapper:3.2.0")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.sql:micronaut-hibernate-jpa")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
