@@ -1,20 +1,18 @@
 package br.gov.sp.fatec.lp2.entity.dto;
 
 import br.gov.sp.fatec.lp2.entity.enums.TipoVeiculo;
+import lombok.Data;
 import lombok.Value;
 
 import java.io.Serializable;
 
-/**
- * DTO for {@link br.gov.sp.fatec.lp2.entity.Veiculo}
- */
-@Value
+@Data
 public class VeiculoDTO implements Serializable {
-    Long id;
-    String descricao;
-    Double valorInicial;
-    boolean vendido;
-    String modelo;
-    String marca;
-    TipoVeiculo tipo;
+    private Long id;
+    private String descricao;
+    private Double valorInicial;
+    private boolean vendido;
+    private String modelo;
+    private String marca;
+    private TipoVeiculo tipo;
 }

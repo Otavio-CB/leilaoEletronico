@@ -1,12 +1,13 @@
 package br.gov.sp.fatec.lp2.entity.dto;
 
+import lombok.Data;
 import lombok.Value;
 
 import java.io.Serializable;
 
 
-@Value
+@Data
 public class LanceDTO implements Serializable {
-    Long id;
-    Double valor;
+    private Long id;
+    private Double valor;
 }

@@ -1,14 +1,15 @@
 package br.gov.sp.fatec.lp2.entity.dto;
 
+import lombok.Data;
 import lombok.Value;
 
 import java.io.Serializable;
 
 
-@Value
+@Data
 public class InstituicaoFinanceiraDTO implements Serializable {
-    Long id;
-    String nome;
-    String cnpj;
-    String endereco;
+    private Long id;
+    private String nome;
+    private String cnpj;
+    private String endereco;
 }
