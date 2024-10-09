@@ -1,23 +1,16 @@
 package br.gov.sp.fatec.lp2.entity;
 
-
-import jakarta.persistence.*;
+import br.gov.sp.fatec.lp2.entity.enums.TipoDispositivo;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 @Entity
 @Data
-public class Dispositivo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Dispositivo extends ProdutoLeilao {
     private String nome;
-    private String tipo;
-    private String descricao;
-    private Double valorInicial;
 
-    private boolean vendido;
-
-    @ManyToOne
-    private Leilao leilao;
+    @Enumerated(EnumType.STRING)
+    private TipoDispositivo tipo;
 }
