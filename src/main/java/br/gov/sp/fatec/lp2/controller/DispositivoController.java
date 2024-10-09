@@ -9,6 +9,7 @@ import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 import org.modelmapper.ModelMapper;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller("/dispositivos")
@@ -50,4 +51,22 @@ public class DispositivoController {
     public void removerDispositivo(@PathVariable Long id) {
         dispositivoRepository.deleteById(id);
     }
+
+    @Put("/{id}/reassociar/{novoLeilaoId}")
+    public Dispositivo reassociarDispositivo(@PathVariable Long id, @PathVariable Long novoLeilaoId) {
+        Dispositivo dispositivo = dispositivoRepository.findById(id).orElseThrow(() -> new RuntimeException("Dispositivo não encontrado"));
+
+        if (dispositivo.isVendido()) {
+            throw new RuntimeException("Não é possível desassociar um dispositivo que já foi vendido.");
+        }
+
+        Leilao novoLeilao = leilaoRepository.findById(novoLeilaoId).orElseThrow(() -> new RuntimeException("Novo leilão não encontrado"));
+        if (novoLeilao.getDataOcorrencia().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("O novo leilão deve ocorrer no futuro.");
+        }
+
+        dispositivo.setLeilao(novoLeilao);
+        return dispositivoRepository.update(dispositivo);
+    }
+
 }

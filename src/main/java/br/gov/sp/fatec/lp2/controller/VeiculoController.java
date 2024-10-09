@@ -1,10 +1,10 @@
 package br.gov.sp.fatec.lp2.controller;
 
+import br.gov.sp.fatec.lp2.entity.Leilao;
+import br.gov.sp.fatec.lp2.entity.Veiculo;
 import br.gov.sp.fatec.lp2.entity.dto.VeiculoDTO;
 import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
 import br.gov.sp.fatec.lp2.repository.VeiculoRepository;
-import br.gov.sp.fatec.lp2.entity.Leilao;
-import br.gov.sp.fatec.lp2.entity.Veiculo;
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 import org.modelmapper.ModelMapper;
@@ -25,8 +25,10 @@ public class VeiculoController {
     private ModelMapper modelMapper;
 
     @Post
-    public VeiculoDTO criarVeiculo(@Body VeiculoDTO veiculoDTO) {
+    public VeiculoDTO criarVeiculo(@Body VeiculoDTO veiculoDTO, @PathVariable Long leilaoId) {
         Veiculo veiculo = modelMapper.map(veiculoDTO, Veiculo.class);
+        Leilao leilao = leilaoRepository.findById(leilaoId).orElseThrow(() -> new RuntimeException("Leilão não encontrado"));
+        veiculo.setLeilao(leilao);
         return modelMapper.map(veiculoRepository.save(veiculo), VeiculoDTO.class);
     }
 
