@@ -25,6 +25,8 @@ dependencies {
     implementation("io.micronaut:micronaut-validation:3.10.3")
     implementation("org.projectlombok:lombok")
     implementation("io.micronaut:micronaut-validation")
+    implementation "io.swagger.core.v3:swagger-annotations:2.1.6"
+    implementation "io.micronaut.openapi:micronaut-openapi:3.3.4"
     compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.h2database:h2:2.2.220")

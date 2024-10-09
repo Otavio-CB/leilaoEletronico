@@ -19,9 +19,4 @@ public class Cliente {
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Lance> lances;
-
-
-    @ManyToMany
-    @JoinTable(name = "cliente_favoritos", joinColumns = @JoinColumn(name = "cliente_id"), inverseJoinColumns = @JoinColumn(name = "leilao_id"))
-    private List<Leilao> produtosFavoritos;
 }
