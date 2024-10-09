@@ -15,6 +15,4 @@ public class InstituicaoFinanceira {
 
     @Column(unique = true)
     private String cnpj;
-
-    private String endereco; // Opcional
 }
