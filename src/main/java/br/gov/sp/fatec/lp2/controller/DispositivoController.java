@@ -1,13 +1,14 @@
 package br.gov.sp.fatec.lp2.controller;
 
-import br.gov.sp.fatec.lp2.repository.DispositivoRepository;
-import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
 import br.gov.sp.fatec.lp2.entity.Dispositivo;
 import br.gov.sp.fatec.lp2.entity.Leilao;
+import br.gov.sp.fatec.lp2.entity.dto.DispositivoDTO;
+import br.gov.sp.fatec.lp2.repository.DispositivoRepository;
+import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
+import org.modelmapper.ModelMapper;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller("/dispositivos")
@@ -19,44 +20,34 @@ public class DispositivoController {
     @Inject
     LeilaoRepository leilaoRepository;
 
+    @Inject
+    ModelMapper modelMapper;
+
     @Post
-    public Dispositivo criarDispositivo(@Body Dispositivo dispositivo, @PathVariable Long leilaoId) {
+    public DispositivoDTO criarDispositivo(@Body DispositivoDTO dispositivoDTO, @PathVariable Long leilaoId) {
+        Dispositivo dispositivo = modelMapper.map(dispositivoDTO, Dispositivo.class);
         Leilao leilao = leilaoRepository.findById(leilaoId).orElseThrow(() -> new RuntimeException("Leilão não encontrado"));
         dispositivo.setLeilao(leilao);
-        return dispositivoRepository.save(dispositivo);
+        dispositivo = dispositivoRepository.save(dispositivo);
+        return modelMapper.map(dispositivo, DispositivoDTO.class);
     }
 
     @Get("/{id}")
-    public Optional<Dispositivo> buscarDispositivo(@PathVariable Long id) {
-        return dispositivoRepository.findById(id);
+    public Optional<DispositivoDTO> buscarDispositivo(@PathVariable Long id) {
+        return dispositivoRepository.findById(id)
+                .map(dispositivo -> modelMapper.map(dispositivo, DispositivoDTO.class));
     }
 
     @Put("/{id}")
-    public Dispositivo atualizarDispositivo(@PathVariable Long id, @Body Dispositivo dispositivo) {
+    public DispositivoDTO atualizarDispositivo(@PathVariable Long id, @Body DispositivoDTO dispositivoDTO) {
+        Dispositivo dispositivo = modelMapper.map(dispositivoDTO, Dispositivo.class);
         dispositivo.setId(id);
-        return dispositivoRepository.update(dispositivo);
+        dispositivo = dispositivoRepository.update(dispositivo);
+        return modelMapper.map(dispositivo, DispositivoDTO.class);
     }
 
     @Delete("/{id}")
     public void removerDispositivo(@PathVariable Long id) {
         dispositivoRepository.deleteById(id);
-    }
-
-    @Put("/{id}/reassociar/{novoLeilaoId}")
-    public Dispositivo reassociarDispositivo(@PathVariable Long id, @PathVariable Long novoLeilaoId) {
-        Dispositivo dispositivo = dispositivoRepository.findById(id).orElseThrow(() -> new RuntimeException("Dispositivo não encontrado"));
-
-        if (dispositivo.isVendido()) {
-            throw new RuntimeException("Não é possível desassociar um dispositivo que já foi vendido.");
-        }
-
-        Leilao novoLeilao = leilaoRepository.findById(novoLeilaoId).orElseThrow(() -> new RuntimeException("Novo leilão não encontrado"));
-
-        if (novoLeilao.getDataOcorrencia().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("O novo leilão deve ocorrer no futuro.");
-        }
-
-        dispositivo.setLeilao(novoLeilao);
-        return dispositivoRepository.update(dispositivo);
     }
 }

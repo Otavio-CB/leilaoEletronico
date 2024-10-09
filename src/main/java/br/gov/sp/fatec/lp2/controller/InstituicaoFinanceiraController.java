@@ -1,9 +1,11 @@
 package br.gov.sp.fatec.lp2.controller;
 
 import br.gov.sp.fatec.lp2.entity.InstituicaoFinanceira;
+import br.gov.sp.fatec.lp2.entity.dto.InstituicaoFinanceiraDTO;
 import br.gov.sp.fatec.lp2.repository.InstituicaoFinanceiraRepository;
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
+import org.modelmapper.ModelMapper;
 
 import java.util.Optional;
 
@@ -13,21 +15,28 @@ public class InstituicaoFinanceiraController {
     @Inject
     InstituicaoFinanceiraRepository instituicaoFinanceiraRepository;
 
+    @Inject
+    private ModelMapper modelMapper;
+
     @Post
-    public InstituicaoFinanceira criarInstituicaoFinanceira(@Body InstituicaoFinanceira instituicaoFinanceira) {
-        return instituicaoFinanceiraRepository.save(instituicaoFinanceira);
+    public InstituicaoFinanceiraDTO criarInstituicaoFinanceira(@Body InstituicaoFinanceiraDTO instituicaoFinanceiraDTO) {
+        InstituicaoFinanceira instituicaoFinanceira = modelMapper.map(instituicaoFinanceiraDTO, InstituicaoFinanceira.class);
+        return modelMapper.map(instituicaoFinanceiraRepository.save(instituicaoFinanceira), InstituicaoFinanceiraDTO.class);
     }
 
     @Get("/{id}")
-    public Optional<InstituicaoFinanceira> buscarInstituicaoFinanceira(@PathVariable Long id) {
-        return instituicaoFinanceiraRepository.findById(id);
+    public Optional<InstituicaoFinanceiraDTO> buscarInstituicaoFinanceira(@PathVariable Long id) {
+        return instituicaoFinanceiraRepository.findById(id)
+                .map(instituicao -> modelMapper.map(instituicao, InstituicaoFinanceiraDTO.class));
     }
 
     @Put("/{id}")
-    public InstituicaoFinanceira atualizarInstituicaoFinanceira(@PathVariable Long id, @Body InstituicaoFinanceira instituicaoFinanceira) {
-        instituicaoFinanceira.setId(id);
-        return instituicaoFinanceiraRepository.update(instituicaoFinanceira);
+    public InstituicaoFinanceiraDTO atualizarInstituicaoFinanceira(@PathVariable Long id, @Body InstituicaoFinanceiraDTO instituicaoFinanceiraDTO) {
+        InstituicaoFinanceira instituicao = modelMapper.map(instituicaoFinanceiraDTO, InstituicaoFinanceira.class);
+        instituicao.setId(id);
+        return modelMapper.map(instituicaoFinanceiraRepository.update(instituicao), InstituicaoFinanceiraDTO.class);
     }
+
 
     @Delete("/{id}")
     public void removerInstituicaoFinanceira(@PathVariable Long id) {

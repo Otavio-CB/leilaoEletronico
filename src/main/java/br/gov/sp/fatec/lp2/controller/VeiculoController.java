@@ -1,11 +1,13 @@
 package br.gov.sp.fatec.lp2.controller;
 
+import br.gov.sp.fatec.lp2.entity.dto.VeiculoDTO;
 import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
 import br.gov.sp.fatec.lp2.repository.VeiculoRepository;
 import br.gov.sp.fatec.lp2.entity.Leilao;
 import br.gov.sp.fatec.lp2.entity.Veiculo;
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -19,20 +21,26 @@ public class VeiculoController {
     @Inject
     LeilaoRepository leilaoRepository;
 
+    @Inject
+    private ModelMapper modelMapper;
+
     @Post
-    public Veiculo criarVeiculo(@Body Veiculo veiculo) {
-        return veiculoRepository.save(veiculo);
+    public VeiculoDTO criarVeiculo(@Body VeiculoDTO veiculoDTO) {
+        Veiculo veiculo = modelMapper.map(veiculoDTO, Veiculo.class);
+        return modelMapper.map(veiculoRepository.save(veiculo), VeiculoDTO.class);
     }
 
     @Get("/{id}")
-    public Optional<Veiculo> buscarVeiculo(@PathVariable Long id) {
-        return veiculoRepository.findById(id);
+    public Optional<VeiculoDTO> buscarVeiculo(@PathVariable Long id) {
+        return veiculoRepository.findById(id)
+                .map(veiculo -> modelMapper.map(veiculo, VeiculoDTO.class));
     }
 
     @Put("/{id}")
-    public Veiculo atualizarVeiculo(@PathVariable Long id, @Body Veiculo veiculo) {
+    public VeiculoDTO atualizarVeiculo(@PathVariable Long id, @Body VeiculoDTO veiculoDTO) {
+        Veiculo veiculo = modelMapper.map(veiculoDTO, Veiculo.class);
         veiculo.setId(id);
-        return veiculoRepository.update(veiculo);
+        return modelMapper.map(veiculoRepository.update(veiculo), VeiculoDTO.class);
     }
 
     @Delete("/{id}")
