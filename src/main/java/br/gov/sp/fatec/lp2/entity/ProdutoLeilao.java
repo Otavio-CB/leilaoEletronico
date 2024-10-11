@@ -1,9 +1,12 @@
 package br.gov.sp.fatec.lp2.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @MappedSuperclass
 public abstract class ProdutoLeilao {
     @Id
