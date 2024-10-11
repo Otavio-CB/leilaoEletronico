@@ -1,5 +1,6 @@
 package br.gov.sp.fatec.lp2.entity;
 
+import io.micronaut.core.annotation.Introspected;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "leilao")
+@Introspected
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,10 +21,19 @@ public class Leilao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private LocalDateTime dataOcorrencia;
+
+    @Column
     private LocalDateTime dataVisita;
+
+    @Column
     private String endereco;
+
+    @Column
     private String cidade;
+
+    @Column
     private String estado;
 
     @OneToMany

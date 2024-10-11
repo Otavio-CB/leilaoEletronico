@@ -1,5 +1,6 @@
 package br.gov.sp.fatec.lp2.entity;
 
+import io.micronaut.core.annotation.Introspected;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "lance")
+@Introspected
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,6 +19,7 @@ public class Lance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private Double valor;
 
     @ManyToOne

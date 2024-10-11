@@ -1,23 +1,22 @@
 package br.gov.sp.fatec.lp2.entity;
 
 import br.gov.sp.fatec.lp2.entity.enums.TipoDispositivo;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import io.micronaut.core.annotation.Introspected;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "dispositivo")
+@Introspected
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Dispositivo extends ProdutoLeilao {
-    private Integer id;
+
+    @Column
     private String nome;
 
     @Enumerated(EnumType.STRING)

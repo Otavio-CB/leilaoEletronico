@@ -1,8 +1,10 @@
 package br.gov.sp.fatec.lp2.entity;
 
+import io.micronaut.core.annotation.Introspected;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Introspected
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,8 +15,13 @@ public abstract class ProdutoLeilao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String descricao;
+
+    @Column
     private Double valorInicial;
+
+    @Column
     private boolean vendido;
 
     @ManyToOne
