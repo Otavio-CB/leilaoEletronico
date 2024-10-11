@@ -3,11 +3,11 @@ package br.gov.sp.fatec.lp2.service;
 import br.gov.sp.fatec.lp2.entity.InstituicaoFinanceira;
 import br.gov.sp.fatec.lp2.entity.Leilao;
 import br.gov.sp.fatec.lp2.entity.dto.LeilaoDTO;
+import br.gov.sp.fatec.lp2.mapper.LeilaoMapper;
 import br.gov.sp.fatec.lp2.repository.InstituicaoFinanceiraRepository;
 import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +22,8 @@ public class LeilaoService {
     @Inject
     private InstituicaoFinanceiraRepository instituicaoFinanceiraRepository;
 
-    @Inject
-    private ModelMapper modelMapper;
-
     public LeilaoDTO criarLeilao(LeilaoDTO leilaoDTO) {
-        Leilao leilao = modelMapper.map(leilaoDTO, Leilao.class);
+        Leilao leilao = LeilaoMapper.INSTANCE.toEntity(leilaoDTO);
 
         List<InstituicaoFinanceira> instituicoes = leilaoDTO.getInstituicaoFinanceiraIds().stream()
                 .map(id -> instituicaoFinanceiraRepository.findById(id)
@@ -35,20 +32,20 @@ public class LeilaoService {
 
         leilao.setInstituicoesFinanceiras(instituicoes);
         Leilao leilaoSalvo = leilaoRepository.save(leilao);
-        return modelMapper.map(leilaoSalvo, LeilaoDTO.class);
+        return LeilaoMapper.INSTANCE.toDTO(leilaoSalvo);
     }
 
     public Optional<LeilaoDTO> buscarLeilao(Long id) {
         return leilaoRepository.findById(id)
-                .map(leilao -> modelMapper.map(leilao, LeilaoDTO.class));
+                .map(LeilaoMapper.INSTANCE::toDTO);
     }
 
     public Optional<LeilaoDTO> atualizarLeilao(Long id, LeilaoDTO leilaoDTO) {
         return leilaoRepository.findById(id).map(leilaoExistente -> {
-            Leilao leilao = modelMapper.map(leilaoDTO, Leilao.class);
+            Leilao leilao = LeilaoMapper.INSTANCE.toEntity(leilaoDTO);
             leilao.setId(id);
             Leilao atualizado = leilaoRepository.update(leilao);
-            return modelMapper.map(atualizado, LeilaoDTO.class);
+            return LeilaoMapper.INSTANCE.toDTO(atualizado);
         });
     }
 

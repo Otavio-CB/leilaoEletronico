@@ -2,10 +2,10 @@ package br.gov.sp.fatec.lp2.service;
 
 import br.gov.sp.fatec.lp2.entity.InstituicaoFinanceira;
 import br.gov.sp.fatec.lp2.entity.dto.InstituicaoFinanceiraDTO;
+import br.gov.sp.fatec.lp2.mapper.InstituicaoFinanceiraMapper;
 import br.gov.sp.fatec.lp2.repository.InstituicaoFinanceiraRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import org.modelmapper.ModelMapper;
 
 import java.util.Optional;
 
@@ -15,26 +15,23 @@ public class InstituicaoFinanceiraService {
     @Inject
     private InstituicaoFinanceiraRepository instituicaoFinanceiraRepository;
 
-    @Inject
-    private ModelMapper modelMapper;
-
     public InstituicaoFinanceiraDTO criarInstituicaoFinanceira(InstituicaoFinanceiraDTO instituicaoFinanceiraDTO) {
-        InstituicaoFinanceira instituicao = modelMapper.map(instituicaoFinanceiraDTO, InstituicaoFinanceira.class);
+        InstituicaoFinanceira instituicao = InstituicaoFinanceiraMapper.INSTANCE.toEntity(instituicaoFinanceiraDTO);
         InstituicaoFinanceira novaInstituicao = instituicaoFinanceiraRepository.save(instituicao);
-        return modelMapper.map(novaInstituicao, InstituicaoFinanceiraDTO.class);
+        return InstituicaoFinanceiraMapper.INSTANCE.toDTO(novaInstituicao);
     }
 
     public Optional<InstituicaoFinanceiraDTO> buscarInstituicaoFinanceira(Long id) {
         return instituicaoFinanceiraRepository.findById(id)
-                .map(instituicao -> modelMapper.map(instituicao, InstituicaoFinanceiraDTO.class));
+                .map(InstituicaoFinanceiraMapper.INSTANCE::toDTO);
     }
 
     public Optional<InstituicaoFinanceiraDTO> atualizarInstituicaoFinanceira(Long id, InstituicaoFinanceiraDTO instituicaoFinanceiraDTO) {
         return instituicaoFinanceiraRepository.findById(id).map(instituicaoExistente -> {
-            InstituicaoFinanceira instituicao = modelMapper.map(instituicaoFinanceiraDTO, InstituicaoFinanceira.class);
+            InstituicaoFinanceira instituicao = InstituicaoFinanceiraMapper.INSTANCE.toEntity(instituicaoFinanceiraDTO);
             instituicao.setId(id);
             InstituicaoFinanceira atualizado = instituicaoFinanceiraRepository.update(instituicao);
-            return modelMapper.map(atualizado, InstituicaoFinanceiraDTO.class);
+            return InstituicaoFinanceiraMapper.INSTANCE.toDTO(atualizado);
         });
     }
 

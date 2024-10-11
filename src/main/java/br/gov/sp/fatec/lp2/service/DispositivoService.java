@@ -3,11 +3,11 @@ package br.gov.sp.fatec.lp2.service;
 import br.gov.sp.fatec.lp2.entity.Dispositivo;
 import br.gov.sp.fatec.lp2.entity.Leilao;
 import br.gov.sp.fatec.lp2.entity.dto.DispositivoDTO;
+import br.gov.sp.fatec.lp2.mapper.DispositivoMapper;
 import br.gov.sp.fatec.lp2.repository.DispositivoRepository;
 import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -21,29 +21,26 @@ public class DispositivoService {
     @Inject
     private LeilaoRepository leilaoRepository;
 
-    @Inject
-    private ModelMapper modelMapper;
-
     public DispositivoDTO criarDispositivo(DispositivoDTO dispositivoDTO, Long leilaoId) {
-        Dispositivo dispositivo = modelMapper.map(dispositivoDTO, Dispositivo.class);
+        Dispositivo dispositivo = DispositivoMapper.INSTANCE.toEntity(dispositivoDTO);
         Leilao leilao = leilaoRepository.findById(leilaoId)
                 .orElseThrow(() -> new RuntimeException("Leilão não encontrado"));
         dispositivo.setLeilao(leilao);
         dispositivo = dispositivoRepository.save(dispositivo);
-        return modelMapper.map(dispositivo, DispositivoDTO.class);
+        return DispositivoMapper.INSTANCE.toDTO(dispositivo);
     }
 
     public Optional<DispositivoDTO> buscarDispositivo(Long id) {
         return dispositivoRepository.findById(id)
-                .map(dispositivo -> modelMapper.map(dispositivo, DispositivoDTO.class));
+                .map(DispositivoMapper.INSTANCE::toDTO);
     }
 
     public Optional<DispositivoDTO> atualizarDispositivo(Long id, DispositivoDTO dispositivoDTO) {
         return dispositivoRepository.findById(id).map(dispositivoExistente -> {
-            Dispositivo dispositivo = modelMapper.map(dispositivoDTO, Dispositivo.class);
-            dispositivo.setId(id);
-            Dispositivo atualizado = dispositivoRepository.update(dispositivo);
-            return modelMapper.map(atualizado, DispositivoDTO.class);
+            // Atualiza os campos existentes
+            DispositivoMapper.INSTANCE.toEntity(dispositivoDTO, dispositivoExistente);
+            Dispositivo atualizado = dispositivoRepository.update(dispositivoExistente);
+            return DispositivoMapper.INSTANCE.toDTO(atualizado);
         });
     }
 
@@ -73,6 +70,6 @@ public class DispositivoService {
 
         dispositivo.setLeilao(novoLeilao);
         Dispositivo atualizado = dispositivoRepository.update(dispositivo);
-        return modelMapper.map(atualizado, DispositivoDTO.class);
+        return DispositivoMapper.INSTANCE.toDTO(atualizado);
     }
 }

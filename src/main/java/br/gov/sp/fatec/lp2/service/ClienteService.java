@@ -2,39 +2,38 @@ package br.gov.sp.fatec.lp2.service;
 
 import br.gov.sp.fatec.lp2.entity.Cliente;
 import br.gov.sp.fatec.lp2.entity.dto.ClienteDTO;
+import br.gov.sp.fatec.lp2.mapper.ClienteMapper;
 import br.gov.sp.fatec.lp2.repository.ClienteRepository;
+import io.micronaut.context.annotation.Requires;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import org.modelmapper.ModelMapper;
 
 import java.util.Optional;
 
+@Requires(beans = ClienteRepository.class)
 @Singleton
 public class ClienteService {
 
     @Inject
     private ClienteRepository clienteRepository;
 
-    @Inject
-    private ModelMapper modelMapper;
-
     public ClienteDTO criarCliente(ClienteDTO clienteDTO) {
-        Cliente cliente = modelMapper.map(clienteDTO, Cliente.class);
+        Cliente cliente = ClienteMapper.INSTANCE.toEntity(clienteDTO);
         cliente = clienteRepository.save(cliente);
-        return modelMapper.map(cliente, ClienteDTO.class);
+        return ClienteMapper.INSTANCE.toDTO(cliente);
     }
 
     public Optional<ClienteDTO> buscarCliente(Long id) {
         return clienteRepository.findById(id)
-                .map(cliente -> modelMapper.map(cliente, ClienteDTO.class));
+                .map(ClienteMapper.INSTANCE::toDTO);
     }
 
     public Optional<ClienteDTO> atualizarCliente(Long id, ClienteDTO clienteDTO) {
         return clienteRepository.findById(id).map(clienteExistente -> {
-            Cliente cliente = modelMapper.map(clienteDTO, Cliente.class);
+            Cliente cliente = ClienteMapper.INSTANCE.toEntity(clienteDTO);
             cliente.setId(id);
             Cliente atualizado = clienteRepository.update(cliente);
-            return modelMapper.map(atualizado, ClienteDTO.class);
+            return ClienteMapper.INSTANCE.toDTO(atualizado);
         });
     }
 
