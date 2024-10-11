@@ -25,7 +25,7 @@ public class VeiculoController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = VeiculoDTO.class)))
     @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
-    @Post
+    @Post("/{leilaoId}")
     public HttpResponse<VeiculoDTO> criarVeiculo(@Body VeiculoDTO veiculoDTO, @PathVariable Long leilaoId) {
         VeiculoDTO criado = veiculoService.criarVeiculo(veiculoDTO, leilaoId);
         return HttpResponse.status(HttpStatus.CREATED).body(criado);
