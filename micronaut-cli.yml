@@ -3,4 +3,4 @@ defaultPackage: br.gov.sp.fatec.lp2
 testFramework: junit
 sourceLanguage: java
 buildTool: gradle
-features: [ app-name, gradle, h2, hibernate-jpa, hibernate-jpamodelgen, http-client-test, java, java-application, jdbc-hikari, junit, logback, lombok, micronaut-aot, micronaut-build, micronaut-http-validation, netty-server, properties, readme, serialization-jackson, shade, static-resources ]
+features: [ app-name, data, data-jpa gradle, h2, hibernate-jpa, hibernate-jpamodelgen, http-client-test, java, java-application, jdbc-hikari, junit, logback, lombok, micronaut-aot, micronaut-build, micronaut-http-validation, netty-server, properties, readme, serialization-jackson, shade, static-resources ]
