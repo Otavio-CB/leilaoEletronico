@@ -14,6 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "dispositivo")
 public class Dispositivo extends ProdutoLeilao {
 
     @Column
