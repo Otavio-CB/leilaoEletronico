@@ -121,6 +121,59 @@ Esses controllers fornecem operações CRUD básicas, com validações e associa
 - **Reassociar Veículo a Outro Leilão**: `PUT /veiculos/{id}/reassociar/{novoLeilaoId}`
     - Reassocia um veículo a um novo leilão.
 
+Aqui está a seção para rodar o projeto com Docker, que você pode adicionar ao seu `README.md`:
+
+## Executar o Projeto com Docker
+
+### Pré-requisitos
+
+Certifique-se de ter o Docker e Docker Compose instalados no seu ambiente.
+
+1. [Instalar o Docker](https://docs.docker.com/get-docker/)
+2. [Instalar o Docker Compose](https://docs.docker.com/compose/install/)
+
+### Instruções para rodar o projeto com Docker
+
+1. **Criar a imagem do Docker**:
+
+2. **Configurar o arquivo `docker-compose.yml`**:
+
+   O arquivo `docker-compose.yml` já está configurado para criar os contêineres da aplicação e do MySQL. Basta rodar o seguinte comando para subir os serviços:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+3. **Verificar os contêineres**:
+
+   Após rodar o comando acima, a aplicação estará disponível em: `http://localhost:8080`. Para verificar se os contêineres estão em execução, utilize:
+
+   ```bash
+   docker ps
+   ```
+
+### Parar os contêineres
+
+Para parar os serviços, basta rodar:
+
+```bash
+docker-compose down
+```
+
+### Recriar contêineres e bancos de dados
+
+Se você precisar recriar o banco de dados ou os contêineres, use o seguinte comando:
+
+```bash
+docker-compose down --volumes
+```
+
+Com isso, o banco de dados será recriado do zero na próxima execução.
+
+---
+
+Esta seção orienta como utilizar Docker para rodar o projeto com um banco de dados MySQL dentro de contêineres, facilitando o ambiente de desenvolvimento e execução.
+
 ## Testes
 
 ### Executar testes unitários
