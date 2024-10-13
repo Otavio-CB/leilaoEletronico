@@ -37,7 +37,6 @@ public class DispositivoService {
 
     public Optional<DispositivoDTO> atualizarDispositivo(Long id, DispositivoDTO dispositivoDTO) {
         return dispositivoRepository.findById(id).map(dispositivoExistente -> {
-            // Atualiza os campos existentes
             DispositivoMapper.INSTANCE.toEntity(dispositivoDTO, dispositivoExistente);
             Dispositivo atualizado = dispositivoRepository.update(dispositivoExistente);
             return DispositivoMapper.INSTANCE.toDTO(atualizado);

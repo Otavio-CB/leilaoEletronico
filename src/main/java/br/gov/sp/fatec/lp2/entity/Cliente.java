@@ -1,6 +1,5 @@
 package br.gov.sp.fatec.lp2.entity;
 
-import io.micronaut.core.annotation.Introspected;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +29,4 @@ public class Cliente {
     private String senha;
 
 
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private List<Lance> lances;
 }

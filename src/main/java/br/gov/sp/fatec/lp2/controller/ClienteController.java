@@ -43,6 +43,8 @@ public class ClienteController {
                 .orElse(HttpResponse.status(HttpStatus.NOT_FOUND));
     }
 
+
+    // NÃO ESTÁ FUNCIONANDO
     @Operation(summary = "Atualiza um cliente existente")
     @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso",
             content = @Content(mediaType = "application/json",

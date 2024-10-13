@@ -43,6 +43,7 @@ public class DispositivoController {
                 .orElse(HttpResponse.status(HttpStatus.NOT_FOUND));
     }
 
+    // ESTÁ CRIANDO OUTRO DISPOSITIVO
     @Operation(summary = "Atualiza um dispositivo existente")
     @ApiResponse(responseCode = "200", description = "Dispositivo atualizado com sucesso",
             content = @Content(mediaType = "application/json",
