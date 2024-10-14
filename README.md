@@ -121,7 +121,20 @@ Esses controllers fornecem operações CRUD básicas, com validações e associa
 - **Reassociar Veículo a Outro Leilão**: `PUT /veiculos/{id}/reassociar/{novoLeilaoId}`
     - Reassocia um veículo a um novo leilão.
 
-Aqui está a seção para rodar o projeto com Docker, que você pode adicionar ao seu `README.md`:
+
+### Lances
+
+- **Criar Lance**: `POST /lances`
+    - Envia um objeto `LanceDTO` no corpo da requisição para registrar um novo lance.
+
+- **Buscar Todos os Lances**: `GET /lances`
+    - Retorna todos os lances registrados.
+
+- **Atualizar Lance**: `PUT /lances/{id}`
+    - Atualiza um lance com o `id` fornecido.
+
+- **Remover Lance**: `DELETE /lances/{id}`
+    - Remove um lance pelo `id`.
 
 ## Executar o Projeto com Docker
 
@@ -134,9 +147,7 @@ Certifique-se de ter o Docker e Docker Compose instalados no seu ambiente.
 
 ### Instruções para rodar o projeto com Docker
 
-1. **Criar a imagem do Docker**:
-
-2. **Configurar o arquivo `docker-compose.yml`**:
+1. **Configurar o arquivo `docker-compose.yml`**:
 
    O arquivo `docker-compose.yml` já está configurado para criar os contêineres da aplicação e do MySQL. Basta rodar o seguinte comando para subir os serviços:
 
