@@ -1,0 +1,623 @@
+{
+	"info": {
+		"_postman_id": "2a729ada-2e8e-4be4-a40e-74aeebc22292",
+		"name": "LeilaoEletronico",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33695336"
+	},
+	"item": [
+		{
+			"name": "GET - clientes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/clientes/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"clientes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post - clientes",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"Luiz Roberto Santos\",\n    \"email\": \"luiz.santos@example.com\",\n    \"senha\": \"senha321\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/clientes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"clientes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - clientes",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nome\": \"João Silva\",\n  \"email\": \"joao.silva@example.com\",\n  \"senha\": \"novaSenha123\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/clientes/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"clientes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE - clientes",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/clientes/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"clientes",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - instituicoes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/instituicoes/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"instituicoes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST - instituicoes",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"Banco Exemplo S.A.\",\n    \"cnpj\": \"12.345.678/0001-80\",\n    \"endereco\": \"Rua dos Amores, 123 - Centro\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/instituicoes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"instituicoes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - instituicoes",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"Banco Exemplo (Atualizado) S.A.\",\n    \"cnpj\": \"12.345.678/0001-80\",\n    \"endereco\": \"Avenida das Árvores, 456 - Jardim\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/instituicoes/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"instituicoes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE - instituicoes",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"Banco Exemplo S.A.\",\n    \"cnpj\": \"12.345.678/0001-90\",\n    \"endereco\": \"Avenida das Árvores, 456 - Jardim\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/instituicoes/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"instituicoes",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - leiloes",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/leiloes/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"leiloes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST - leiloes",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"dataOcorrencia\": \"2024-10-13T10:00:00\",\n  \"dataVisita\": \"2024-10-12T10:00:00\",\n  \"endereco\": \"Rua Exemplo, 123\",\n  \"cidade\": \"São Paulo\",\n  \"estado\": \"SP\",\n  \"instituicaoFinanceiraIds\": [1]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/leiloes/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"leiloes",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - leiloes",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"dataOcorrencia\": \"2024-10-13T10:00:00\",\n  \"dataVisita\": \"2024-10-12T10:00:00\",\n  \"endereco\": \"Rua Atualizada, 456\",\n  \"cidade\": \"Paraná\",\n  \"estado\": \"SP\",\n  \"instituicaoFinanceiraIds\": [1]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/leiloes/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"leiloes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE- leiloes",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"dataOcorrencia\": \"2024-10-13T10:00:00\",\n  \"dataVisita\": \"2024-10-12T10:00:00\",\n  \"endereco\": \"Rua Atualizada, 456\",\n  \"cidade\": \"São Paulo\",\n  \"estado\": \"SP\",\n  \"instituicaoFinanceiraIds\": [1, 2]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/leiloes/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"leiloes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - veiculos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/veiculos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"veiculos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST - veiculos",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"descricao\": \"Veículo em excelente estado\",\n  \"valorInicial\": 20000.0,\n  \"vendido\": false,\n  \"modelo\": \"Civic\",\n  \"marca\": \"Honda\",\n  \"tipo\": \"CARRO\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/veiculos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"veiculos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - veiculos",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"descricao\": \"Veículo atualizado\",\n  \"valorInicial\": 21000.0,\n  \"vendido\": false,\n  \"modelo\": \"Civic\",\n  \"marca\": \"Honda\",\n  \"tipo\": \"CARRO\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/veiculos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"veiculos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE - veiculos",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/veiculos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"veiculos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - dispositivos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/dispositivos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dispositivos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST - dispositivos",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"descricao\": \"Notebook Dell XPS 13\",\n    \"valorInicial\": 2500.00,\n    \"vendido\": false,\n    \"nome\": \"Dell XPS 13\",\n    \"tipo\": \"NOTEBOOK\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/dispositivos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dispositivos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - dispositivos",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"descricao\": \"Notebook Dell XPS 13 (Atualizado)\",\n    \"valorInicial\": 2300.00,\n    \"vendido\": true,\n    \"nome\": \"Dell XPS 13\",\n    \"tipo\": \"NOTEBOOK\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/dispositivos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dispositivos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE - dispositivos",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/dispositivos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dispositivos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - lances",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/lances",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"lances"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST - lances",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"valor\": 1500.00,\n    \"clienteId\": 1\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/lances",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"lances"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST - lances",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"valor\": 2000.00,\n    \"clienteId\": 1\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/lances",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"lances"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE - lances",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/lances/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"lances",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

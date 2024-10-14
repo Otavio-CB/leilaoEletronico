@@ -77,10 +77,4 @@ micronaut {
     }
 }
 
-shadowJar {
-    archiveBaseName.set("app") // Define o nome do arquivo JAR
-    archiveClassifier.set("")    // Remove o sufixo do classificador
-    archiveVersion.set("")       // Remove a versão do arquivo JAR
-}
-
 
