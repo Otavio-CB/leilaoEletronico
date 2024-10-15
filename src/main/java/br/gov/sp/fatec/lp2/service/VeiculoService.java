@@ -36,13 +36,14 @@ public class VeiculoService {
     }
 
     public VeiculoDTO atualizarVeiculo(Long id, VeiculoDTO veiculoDTO) {
-        veiculoRepository.findById(id).orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
-
-        Veiculo veiculo = VeiculoMapper.INSTANCE.toEntity(veiculoDTO);
-        veiculo.setId(id);
-        Veiculo atualizado = veiculoRepository.update(veiculo);
+        Veiculo veiculoExistente = veiculoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
+        veiculoDTO.setId(id);
+        VeiculoMapper.INSTANCE.updateEntityFromDto(veiculoDTO, veiculoExistente);
+        Veiculo atualizado = veiculoRepository.update(veiculoExistente);
         return VeiculoMapper.INSTANCE.toDTO(atualizado);
     }
+
 
     public boolean removerVeiculo(Long id) {
         Optional<Veiculo> veiculoOpt = veiculoRepository.findById(id);
