@@ -13,5 +13,6 @@ public interface DispositivoMapper {
     DispositivoDTO toDTO(Dispositivo dispositivo);
     Dispositivo toEntity(DispositivoDTO dispositivoDTO);
     void toEntity(DispositivoDTO dispositivoDTO, @MappingTarget Dispositivo dispositivo);
+    void updateEntityFromDto(DispositivoDTO dispositivoDTO, @MappingTarget Dispositivo dispositivo);
 
 }
