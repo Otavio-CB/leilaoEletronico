@@ -1,5 +1,6 @@
 package br.gov.sp.fatec.lp2.service;
 
+import br.gov.sp.fatec.lp2.entity.Dispositivo;
 import br.gov.sp.fatec.lp2.entity.Leilao;
 import br.gov.sp.fatec.lp2.entity.Veiculo;
 import br.gov.sp.fatec.lp2.entity.dto.VeiculoDTO;
@@ -35,13 +36,13 @@ public class VeiculoService {
                 .map(VeiculoMapper.INSTANCE::toDTO);
     }
 
-    public VeiculoDTO atualizarVeiculo(Long id, VeiculoDTO veiculoDTO) {
-        Veiculo veiculoExistente = veiculoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
-        veiculoDTO.setId(id);
-        VeiculoMapper.INSTANCE.updateEntityFromDto(veiculoDTO, veiculoExistente);
-        Veiculo atualizado = veiculoRepository.update(veiculoExistente);
-        return VeiculoMapper.INSTANCE.toDTO(atualizado);
+    public Optional<VeiculoDTO> atualizarVeiculo(Long id, VeiculoDTO veiculoDTO) {
+        return veiculoRepository.findById(id).map(veiculoExistente -> {
+            veiculoDTO.setId(id);
+            VeiculoMapper.INSTANCE.toEntity(veiculoDTO, veiculoExistente);
+            Veiculo atualizado = veiculoRepository.update(veiculoExistente);
+            return VeiculoMapper.INSTANCE.toDTO(atualizado);
+        });
     }
 
 
@@ -54,8 +55,8 @@ public class VeiculoService {
         return false;
     }
 
-    public Veiculo reassociarVeiculo(Long veiculoId, Long novoLeilaoId) {
-        Veiculo veiculo = veiculoRepository.findById(veiculoId)
+    public VeiculoDTO reassociarVeiculo(Long id, Long novoLeilaoId) {
+        Veiculo veiculo = veiculoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
 
         if (veiculo.isVendido()) {
@@ -70,6 +71,7 @@ public class VeiculoService {
         }
 
         veiculo.setLeilao(novoLeilao);
-        return veiculoRepository.update(veiculo);
+        Veiculo atualizado = veiculoRepository.update(veiculo);
+        return VeiculoMapper.INSTANCE.toDTO(atualizado);
     }
 }

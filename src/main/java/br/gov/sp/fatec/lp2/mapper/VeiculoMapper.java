@@ -12,5 +12,6 @@ public interface VeiculoMapper {
 
     VeiculoDTO toDTO(Veiculo veiculo);
     Veiculo toEntity(VeiculoDTO veiculoDTO);
+    void toEntity(VeiculoDTO veiculoDTO, @MappingTarget Veiculo veiculo);
     void updateEntityFromDto(VeiculoDTO veiculoDTO, @MappingTarget Veiculo veiculo);
 }

@@ -48,8 +48,10 @@ public class VeiculoController {
     @ApiResponse(responseCode = "404", description = "Veículo não encontrado")
     @Put("/{id}")
     public HttpResponse<VeiculoDTO> atualizarVeiculo(@PathVariable Long id, @Body VeiculoDTO veiculoDTO) {
-        VeiculoDTO atualizado = veiculoService.atualizarVeiculo(id, veiculoDTO);
-        return HttpResponse.ok(atualizado);
+        return veiculoService.atualizarVeiculo(id, veiculoDTO)
+                .map(HttpResponse::ok)
+                .orElse(HttpResponse.status(HttpStatus.NOT_FOUND));
+
     }
 
     @Operation(summary = "Remove um veículo por ID")
@@ -69,13 +71,9 @@ public class VeiculoController {
     @ApiResponse(responseCode = "400", description = "Não é possível reassociar um veículo vendido ou o novo leilão já ocorreu")
     @ApiResponse(responseCode = "404", description = "Veículo ou leilão não encontrado")
     @Put("/{id}/reassociar/{novoLeilaoId}")
-    public HttpResponse<Veiculo> reassociarVeiculo(@PathVariable Long id, @PathVariable Long novoLeilaoId) {
-        try {
-            Veiculo veiculo = veiculoService.reassociarVeiculo(id, novoLeilaoId);
-            return HttpResponse.ok(veiculo);
-        } catch (RuntimeException e) {
-            return HttpResponse.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+    public HttpResponse<VeiculoDTO> reassociarVeiculo(@PathVariable Long id, @PathVariable Long novoLeilaoId) {
+        VeiculoDTO reassociado = veiculoService.reassociarVeiculo(id, novoLeilaoId);
+        return HttpResponse.ok().body(reassociado);
     }
 
 }
