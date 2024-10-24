@@ -2,6 +2,7 @@ package br.gov.sp.fatec.lp2.controller;
 
 import br.gov.sp.fatec.lp2.entity.Leilao;
 import br.gov.sp.fatec.lp2.entity.dto.LeilaoDTO;
+import br.gov.sp.fatec.lp2.entity.dto.LeilaoDetalhadoDTO;
 import br.gov.sp.fatec.lp2.mapper.LeilaoMapper;
 import br.gov.sp.fatec.lp2.service.LeilaoService;
 import io.micronaut.http.HttpResponse;
@@ -91,6 +92,13 @@ public class LeilaoController {
                 .map(LeilaoMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
         return HttpResponse.ok(leiloes);
+    }
+
+    @Get("/{id}/detalhes")
+    public HttpResponse<LeilaoDetalhadoDTO> detalharLeilao(@PathVariable Long id) {
+        return leilaoService.detalharLeilao(id)
+                .map(HttpResponse::ok)
+                .orElse(HttpResponse.status(HttpStatus.NOT_FOUND));
     }
 
 }

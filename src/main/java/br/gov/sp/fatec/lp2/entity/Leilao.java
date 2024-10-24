@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Serdeable
@@ -39,13 +40,14 @@ public class Leilao {
     @Column
     private String estado;
 
-    @OneToMany
-    private List<Dispositivo> dispositivos;
+    @OneToMany(mappedBy = "leilao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Dispositivo> dispositivos = new ArrayList<>(); // Inicializando a lista
 
-    @OneToMany
-    private List<Veiculo> veiculos;
+    @OneToMany(mappedBy = "leilao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Veiculo> veiculos = new ArrayList<>(); // Inicializando a lista
 
     @ManyToMany
     @JoinTable(name = "leilao_instituicao_financeira", joinColumns = @JoinColumn(name = "leilao_id"), inverseJoinColumns = @JoinColumn(name = "instituicao_financeira_id"))
-    private List<InstituicaoFinanceira> instituicoesFinanceiras;
+    private List<InstituicaoFinanceira> instituicoesFinanceiras = new ArrayList<>(); // Inicializando a lista
+
 }

@@ -1,16 +1,24 @@
 package br.gov.sp.fatec.lp2.service;
 
+import br.gov.sp.fatec.lp2.entity.Dispositivo;
 import br.gov.sp.fatec.lp2.entity.InstituicaoFinanceira;
 import br.gov.sp.fatec.lp2.entity.Leilao;
+import br.gov.sp.fatec.lp2.entity.Veiculo;
 import br.gov.sp.fatec.lp2.entity.dto.LeilaoDTO;
+import br.gov.sp.fatec.lp2.entity.dto.LeilaoDetalhadoDTO;
+import br.gov.sp.fatec.lp2.mapper.LeilaoDetalhadoMapper;
 import br.gov.sp.fatec.lp2.mapper.LeilaoMapper;
 import br.gov.sp.fatec.lp2.repository.InstituicaoFinanceiraRepository;
 import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
+import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import io.micronaut.data.model.Sort;
 import io.micronaut.data.model.Sort.Order;
+import org.hibernate.Hibernate;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -74,5 +82,22 @@ public class LeilaoService {
         return leilaoRepository.findAllLeiloesOrdenadosPorData();
     }
 
+    @Transactional(readOnly = true)
+    public Optional<LeilaoDetalhadoDTO> detalharLeilao(Long id) {
+        return leilaoRepository.findById(id).map(leilao -> {
+            // Inicializar coleções
+            if (leilao.getDispositivos() != null) {
+                Hibernate.initialize(leilao.getDispositivos());
+            }
+            if (leilao.getVeiculos() != null) {
+                Hibernate.initialize(leilao.getVeiculos());
+            }
 
+            // Ordenação e mapeamento para DTO
+            leilao.getDispositivos().sort(Comparator.comparing(Dispositivo::getNome));
+            leilao.getVeiculos().sort(Comparator.comparing(Veiculo::getDescricao));
+
+            return LeilaoDetalhadoMapper.INSTANCE.toDTO(leilao);
+        });
+    }
 }
