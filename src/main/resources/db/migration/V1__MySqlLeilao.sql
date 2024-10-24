@@ -33,6 +33,9 @@ CREATE TABLE IF NOT EXISTS lance
     valor      DECIMAL(15, 2),
     cliente_id BIGINT,
     leilao_id  BIGINT,
+    data_hora TIMESTAMP NOT NULL,
+    veiculo_id BIGINT,
+    dispositivo_id BIGINT,
     CONSTRAINT pk_lance PRIMARY KEY (id)
 );
 

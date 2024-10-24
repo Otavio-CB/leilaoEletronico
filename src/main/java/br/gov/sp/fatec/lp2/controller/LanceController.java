@@ -19,39 +19,24 @@ public class LanceController {
     @Inject
     private LanceService lanceService;
 
-    @Operation(summary = "Registra um novo lance")
+    @Operation(summary = "Cria um novo lance")
     @ApiResponse(responseCode = "201", description = "Lance criado com sucesso",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = LanceDTO.class)))
-    @ApiResponse(responseCode = "400", description = "Erro de validação nos dados fornecidos")
+    @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @Post
     public HttpResponse<LanceDTO> criarLance(@Body LanceDTO lanceDTO) {
-        LanceDTO criado = lanceService.salvarLance(lanceDTO);
+        LanceDTO criado = lanceService.criarLance(lanceDTO);
         return HttpResponse.status(HttpStatus.CREATED).body(criado);
     }
 
-    @Operation(summary = "Busca todos os lances registrados")
-    @ApiResponse(responseCode = "200", description = "Lances retornados com sucesso",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = LanceDTO.class)))
-    @Get
-    public HttpResponse<Iterable<LanceDTO>> buscarLances() {
-        return HttpResponse.ok(lanceService.buscarTodos());
-    }
-
-    @Operation(summary = "Atualiza um lance existente")
-    @ApiResponse(responseCode = "200", description = "Lance atualizado com sucesso",
+    @Operation(summary = "Busca um lance por ID")
+    @ApiResponse(responseCode = "200", description = "Lance encontrado",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = LanceDTO.class)))
     @ApiResponse(responseCode = "404", description = "Lance não encontrado")
-    @Put("/{id}")
-    public HttpResponse<LanceDTO> atualizarLance(@PathVariable Long id, @Body LanceDTO lanceDTO) {
-        return HttpResponse.ok(lanceService.atualizarLance(id, lanceDTO));
-    }
-
-    @Operation(summary = "Remove um lance por ID")
-    @ApiResponse(responseCode = "204", description = "Lance removido com sucesso")
-    @ApiResponse(responseCode = "404", description = "Lance não encontrado")
-    @Delete("/{id}")
-    public HttpResponse<Void> removerLance(@PathVariable Long id) {
-        lanceService.removerLance(id);
-        return HttpResponse.noContent();
+    @Get("/{id}")
+    public HttpResponse<LanceDTO> buscarLance(@PathVariable Long id) {
+        return lanceService.buscarLance(id)
+                .map(HttpResponse::ok)
+                .orElse(HttpResponse.status(HttpStatus.NOT_FOUND));
     }
 }

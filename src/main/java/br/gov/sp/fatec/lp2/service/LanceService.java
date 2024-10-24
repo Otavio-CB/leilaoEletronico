@@ -1,15 +1,14 @@
 package br.gov.sp.fatec.lp2.service;
 
-import br.gov.sp.fatec.lp2.entity.Lance;
-import br.gov.sp.fatec.lp2.entity.Cliente;
-import br.gov.sp.fatec.lp2.entity.Leilao;
+import br.gov.sp.fatec.lp2.entity.*;
 import br.gov.sp.fatec.lp2.mapper.LanceMapper;
-import br.gov.sp.fatec.lp2.repository.ClienteRepository;
-import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
-import br.gov.sp.fatec.lp2.repository.LanceRepository;
+import br.gov.sp.fatec.lp2.repository.*;
 import br.gov.sp.fatec.lp2.entity.dto.LanceDTO;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Singleton
 public class LanceService {
@@ -21,37 +20,50 @@ public class LanceService {
     private ClienteRepository clienteRepository;
 
     @Inject
-    private LeilaoRepository leilaoRepository;
+    private VeiculoRepository veiculoRepository;
 
     @Inject
-    private LanceMapper lanceMapper;
+    private DispositivoRepository dispositivoRepository;
 
-    public LanceDTO salvarLance(LanceDTO lanceDTO) {
+    public LanceDTO criarLance(LanceDTO lanceDTO) {
+        Lance lance = LanceMapper.INSTANCE.toEntity(lanceDTO);
+
+        lance.setDataHora(LocalDateTime.now());
+
+        // Associar o cliente
         Cliente cliente = clienteRepository.findById(lanceDTO.getClienteId())
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
-        Leilao leilao = leilaoRepository.findById(lanceDTO.getLeilaoId())
-                .orElseThrow(() -> new IllegalArgumentException("Leilão não encontrado"));
-
-        Lance lance = lanceMapper.toEntity(lanceDTO);
         lance.setCliente(cliente);
-        lance.setLeilao(leilao);
 
-        Lance salvo = lanceRepository.save(lance);
-        return lanceMapper.toDTO(salvo);
+        // Verificar se pelo menos um produto (veiculo ou dispositivo) está presente
+        if (lanceDTO.getVeiculoId() == null && lanceDTO.getDispositivoId() == null) {
+            throw new IllegalArgumentException("É necessário associar um Veículo ou Dispositivo ao lance");
+        }
+
+        // Verificar e carregar o Veiculo, se fornecido
+        if (lanceDTO.getVeiculoId() != null) {
+            Veiculo veiculo = veiculoRepository.findById(lanceDTO.getVeiculoId())
+                    .orElseThrow(() -> new IllegalArgumentException("Veiculo não encontrado"));
+            lance.setVeiculo(veiculo);  // O Veículo já está salvo e gerenciado pelo JPA
+        }
+
+        // Verificar e carregar o Dispositivo, se fornecido
+        if (lanceDTO.getDispositivoId() != null) {
+            Dispositivo dispositivo = dispositivoRepository.findById(lanceDTO.getDispositivoId())
+                    .orElseThrow(() -> new IllegalArgumentException("Dispositivo não encontrado"));
+            lance.setDispositivo(dispositivo);  // O Dispositivo já está salvo e gerenciado pelo JPA
+        }
+
+        // Salvar o lance
+        lance = lanceRepository.save(lance);
+        return LanceMapper.INSTANCE.toDTO(lance);
     }
 
-    public Iterable<LanceDTO> buscarTodos() {
-        return lanceRepository.findAll().stream().map(lanceMapper::toDTO).toList();
-    }
 
-    public LanceDTO atualizarLance(Long id, LanceDTO lanceDTO) {
-        Lance lance = lanceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Lance não encontrado"));
-        lanceMapper.toEntity(lanceDTO, lance);
-        return lanceMapper.toDTO(lanceRepository.update(lance));
-    }
 
-    public void removerLance(Long id) {
-        lanceRepository.deleteById(id);
+
+    public Optional<LanceDTO> buscarLance(Long id) {
+        return lanceRepository.findById(id)
+                .map(LanceMapper.INSTANCE::toDTO);
     }
 }

@@ -13,5 +13,7 @@ public class LanceDTO implements Serializable {
     private Long id;
     private Double valor;
     private Long clienteId;
-    private Long leilaoId;
+    private Long veiculoId;
+    private Long dispositivoId;
 }
+
