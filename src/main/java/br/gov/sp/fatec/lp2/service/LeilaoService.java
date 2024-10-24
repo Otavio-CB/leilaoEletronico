@@ -4,10 +4,14 @@ import br.gov.sp.fatec.lp2.entity.Dispositivo;
 import br.gov.sp.fatec.lp2.entity.InstituicaoFinanceira;
 import br.gov.sp.fatec.lp2.entity.Leilao;
 import br.gov.sp.fatec.lp2.entity.Veiculo;
+import br.gov.sp.fatec.lp2.entity.dto.DispositivoDTO;
 import br.gov.sp.fatec.lp2.entity.dto.LeilaoDTO;
 import br.gov.sp.fatec.lp2.entity.dto.LeilaoDetalhadoDTO;
+import br.gov.sp.fatec.lp2.entity.dto.VeiculoDTO;
+import br.gov.sp.fatec.lp2.mapper.DispositivoMapper;
 import br.gov.sp.fatec.lp2.mapper.LeilaoDetalhadoMapper;
 import br.gov.sp.fatec.lp2.mapper.LeilaoMapper;
+import br.gov.sp.fatec.lp2.mapper.VeiculoMapper;
 import br.gov.sp.fatec.lp2.repository.InstituicaoFinanceiraRepository;
 import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
 import io.micronaut.transaction.annotation.Transactional;
@@ -100,4 +104,25 @@ public class LeilaoService {
             return LeilaoDetalhadoMapper.INSTANCE.toDTO(leilao);
         });
     }
+
+    @Transactional(readOnly = true)
+    public Optional<DispositivoDTO> detalharDispositivoNoLeilao(Long leilaoId, Long dispositivoId) {
+        return leilaoRepository.findById(leilaoId).flatMap(leilao ->
+                leilao.getDispositivos().stream()
+                        .filter(dispositivo -> dispositivo.getId().equals(dispositivoId))
+                        .findFirst()
+                        .map(DispositivoMapper.INSTANCE::toDTO)
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<VeiculoDTO> detalharVeiculoNoLeilao(Long leilaoId, Long veiculoId) {
+        return leilaoRepository.findById(leilaoId).flatMap(leilao ->
+                leilao.getVeiculos().stream()
+                        .filter(veiculo -> veiculo.getId().equals(veiculoId))
+                        .findFirst()
+                        .map(VeiculoMapper.INSTANCE::toDTO)
+        );
+    }
+
 }

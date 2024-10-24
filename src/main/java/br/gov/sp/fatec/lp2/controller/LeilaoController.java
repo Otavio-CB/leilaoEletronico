@@ -1,8 +1,10 @@
 package br.gov.sp.fatec.lp2.controller;
 
 import br.gov.sp.fatec.lp2.entity.Leilao;
+import br.gov.sp.fatec.lp2.entity.dto.DispositivoDTO;
 import br.gov.sp.fatec.lp2.entity.dto.LeilaoDTO;
 import br.gov.sp.fatec.lp2.entity.dto.LeilaoDetalhadoDTO;
+import br.gov.sp.fatec.lp2.entity.dto.VeiculoDTO;
 import br.gov.sp.fatec.lp2.mapper.LeilaoMapper;
 import br.gov.sp.fatec.lp2.service.LeilaoService;
 import io.micronaut.http.HttpResponse;
@@ -100,5 +102,30 @@ public class LeilaoController {
                 .map(HttpResponse::ok)
                 .orElse(HttpResponse.status(HttpStatus.NOT_FOUND));
     }
+
+    @Operation(summary = "Detalha um dispositivo associado ao leilão")
+    @ApiResponse(responseCode = "200", description = "Dispositivo encontrado",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = DispositivoDTO.class)))
+    @ApiResponse(responseCode = "404", description = "Dispositivo ou leilão não encontrado")
+    @Get("/{leilaoId}/dispositivos/{dispositivoId}")
+    public HttpResponse<DispositivoDTO> detalharDispositivo(@PathVariable Long leilaoId, @PathVariable Long dispositivoId) {
+        return leilaoService.detalharDispositivoNoLeilao(leilaoId, dispositivoId)
+                .map(HttpResponse::ok)
+                .orElse(HttpResponse.status(HttpStatus.NOT_FOUND));
+    }
+
+    @Operation(summary = "Detalha um veículo associado ao leilão")
+    @ApiResponse(responseCode = "200", description = "Veículo encontrado",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = VeiculoDTO.class)))
+    @ApiResponse(responseCode = "404", description = "Veículo ou leilão não encontrado")
+    @Get("/{leilaoId}/veiculos/{veiculoId}")
+    public HttpResponse<VeiculoDTO> detalharVeiculo(@PathVariable Long leilaoId, @PathVariable Long veiculoId) {
+        return leilaoService.detalharVeiculoNoLeilao(leilaoId, veiculoId)
+                .map(HttpResponse::ok)
+                .orElse(HttpResponse.status(HttpStatus.NOT_FOUND));
+    }
+
 
 }
