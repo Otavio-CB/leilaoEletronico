@@ -2,6 +2,7 @@ package br.gov.sp.fatec.lp2.controller;
 
 import br.gov.sp.fatec.lp2.entity.Leilao;
 import br.gov.sp.fatec.lp2.entity.dto.LeilaoDTO;
+import br.gov.sp.fatec.lp2.mapper.LeilaoMapper;
 import br.gov.sp.fatec.lp2.service.LeilaoService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -12,6 +13,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller("/leiloes")
 @Tag(name = "Leilão", description = "Operações relacionadas aos leilões")
@@ -76,4 +80,17 @@ public class LeilaoController {
         Leilao leilao = leilaoService.associarInstituicao(id, instituicaoId);
         return HttpResponse.ok(leilao);
     }
+
+    @Operation(summary = "Lista todos os leilões ordenados por data de ocorrência")
+    @ApiResponse(responseCode = "200", description = "Leilões listados com sucesso",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Leilao.class)))
+    @Get("/ordenados-por-data")
+    public HttpResponse<List<LeilaoDTO>> listarLeiloesOrdenadosPorData() {
+        List<LeilaoDTO> leiloes = leilaoService.listarLeiloesOrdenadosPorData().stream()
+                .map(LeilaoMapper.INSTANCE::toDTO)
+                .collect(Collectors.toList());
+        return HttpResponse.ok(leiloes);
+    }
+
 }

@@ -9,6 +9,8 @@ import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
+import io.micronaut.data.model.Sort;
+import io.micronaut.data.model.Sort.Order;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,4 +69,10 @@ public class LeilaoService {
         leilao.getInstituicoesFinanceiras().add(instituicao);
         return leilaoRepository.update(leilao);
     }
+
+    public List<Leilao> listarLeiloesOrdenadosPorData() {
+        return leilaoRepository.findAllLeiloesOrdenadosPorData();
+    }
+
+
 }

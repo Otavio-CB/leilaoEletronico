@@ -1,5 +1,6 @@
 package br.gov.sp.fatec.lp2.entity;
 
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Serdeable
 @Entity
 @Getter
 @Setter
