@@ -22,6 +22,7 @@ import io.micronaut.data.model.Sort;
 import io.micronaut.data.model.Sort.Order;
 import org.hibernate.Hibernate;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -124,5 +125,31 @@ public class LeilaoService {
                         .map(VeiculoMapper.INSTANCE::toDTO)
         );
     }
+
+    @Transactional(readOnly = true)
+    public List<Object> buscarProdutosPorFaixaDeValor(Long leilaoId, Double valorMin, Double valorMax) {
+        Leilao leilao = leilaoRepository.findById(leilaoId)
+                .orElseThrow(() -> new RuntimeException("Leilão não encontrado"));
+
+        // Filtra dispositivos pela faixa de valores
+        List<DispositivoDTO> dispositivosFiltrados = leilao.getDispositivos().stream()
+                .filter(dispositivo -> dispositivo.getValorInicial() >= valorMin && dispositivo.getValorInicial() <= valorMax)
+                .map(DispositivoMapper.INSTANCE::toDTO)
+                .collect(Collectors.toList());
+
+        // Filtra veículos pela faixa de valores
+        List<VeiculoDTO> veiculosFiltrados = leilao.getVeiculos().stream()
+                .filter(veiculo -> veiculo.getValorInicial() >= valorMin && veiculo.getValorInicial() <= valorMax)
+                .map(VeiculoMapper.INSTANCE::toDTO)
+                .collect(Collectors.toList());
+
+        // Junta dispositivos e veículos em uma lista única de produtos
+        List<Object> produtosFiltrados = new ArrayList<>();
+        produtosFiltrados.addAll(dispositivosFiltrados);
+        produtosFiltrados.addAll(veiculosFiltrados);
+
+        return produtosFiltrados;
+    }
+
 
 }
