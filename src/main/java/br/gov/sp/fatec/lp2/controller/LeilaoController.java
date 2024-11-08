@@ -141,5 +141,32 @@ public class LeilaoController {
         return HttpResponse.ok(produtos);
     }
 
+    @Operation(summary = "Busca produtos (veículos e dispositivos) em um leilão por faixa de valor considerando lances")
+    @ApiResponse(responseCode = "200", description = "Produtos encontrados",
+            content = @Content(mediaType = "application/json"))
+    @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
+    @Get("/{leilaoId}/produtos/por-faixa-de-valor-com-lances")
+    public HttpResponse<List<Object>> buscarProdutosPorFaixaDeValorComLances(
+            @PathVariable Long leilaoId,
+            @QueryValue Double valorMin,
+            @QueryValue Double valorMax) {
+
+        List<Object> produtos = leilaoService.buscarProdutosPorFaixaDeValorComLances(leilaoId, valorMin, valorMax);
+        return HttpResponse.ok(produtos);
+    }
+
+    @Get("/{leilaoId}/produtos/por-palavra-chave")
+    public List<Object> buscarProdutosPorPalavraChave(Long leilaoId, @QueryValue String palavraChave) {
+        return leilaoService.buscarProdutosPorPalavraChave(leilaoId, palavraChave);
+    }
+
+    @Get("/{leilaoId}/produtos/por-tipo")
+    public HttpResponse<List<Object>> buscarProdutosPorTipo(
+            @PathVariable Long leilaoId,
+            @QueryValue String tipoProduto) {
+
+        List<Object> produtos = leilaoService.buscarProdutosPorTipo(leilaoId, tipoProduto);
+        return HttpResponse.ok(produtos);
+    }
 
 }

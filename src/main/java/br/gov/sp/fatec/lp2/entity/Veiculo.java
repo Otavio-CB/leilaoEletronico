@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Serdeable
 @Entity
 @Introspected
@@ -27,4 +29,7 @@ public class Veiculo extends ProdutoLeilao {
 
     @Enumerated(EnumType.STRING)
     private TipoVeiculo tipo;
+
+    @OneToMany(mappedBy = "veiculo", cascade = CascadeType.ALL)
+    private List<Lance> lances;
 }

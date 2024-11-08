@@ -1,9 +1,6 @@
 package br.gov.sp.fatec.lp2.service;
 
-import br.gov.sp.fatec.lp2.entity.Dispositivo;
-import br.gov.sp.fatec.lp2.entity.InstituicaoFinanceira;
-import br.gov.sp.fatec.lp2.entity.Leilao;
-import br.gov.sp.fatec.lp2.entity.Veiculo;
+import br.gov.sp.fatec.lp2.entity.*;
 import br.gov.sp.fatec.lp2.entity.dto.DispositivoDTO;
 import br.gov.sp.fatec.lp2.entity.dto.LeilaoDTO;
 import br.gov.sp.fatec.lp2.entity.dto.LeilaoDetalhadoDTO;
@@ -22,10 +19,7 @@ import io.micronaut.data.model.Sort;
 import io.micronaut.data.model.Sort.Order;
 import org.hibernate.Hibernate;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Singleton
@@ -151,5 +145,101 @@ public class LeilaoService {
         return produtosFiltrados;
     }
 
+    @Transactional(readOnly = true)
+    public List<Object> buscarProdutosPorFaixaDeValorComLances(Long leilaoId, Double valorMin, Double valorMax) {
+        // Busca o leilão
+        Leilao leilao = leilaoRepository.findById(leilaoId)
+                .orElseThrow(() -> new RuntimeException("Leilão não encontrado"));
+
+        // Filtra dispositivos pela faixa de valores considerando lances adicionais
+        List<DispositivoDTO> dispositivosFiltrados = leilao.getDispositivos().stream()
+                .filter(dispositivo -> {
+                    Double valorTotal = dispositivo.getValorInicial() +
+                            dispositivo.getLances().stream()
+                                    .mapToDouble(Lance::getValor)
+                                    .sum();
+                    // Filtra apenas os dispositivos que estão dentro da faixa de valor, incluindo limites
+                    return (valorTotal > valorMin && valorTotal < valorMax) ||
+                            valorTotal.equals(valorMin) || valorTotal.equals(valorMax);
+                })
+                .map(DispositivoMapper.INSTANCE::toDTO) // Mapeia para DTO
+                .toList();
+
+        // Filtra veículos pela faixa de valores considerando lances adicionais
+        List<VeiculoDTO> veiculosFiltrados = leilao.getVeiculos().stream()
+                .filter(veiculo -> {
+                    Double valorTotal = veiculo.getValorInicial() +
+                            veiculo.getLances().stream()
+                                    .mapToDouble(Lance::getValor)
+                                    .sum();
+                    // Filtra apenas os veículos que estão dentro da faixa de valor, incluindo limites
+                    return (valorTotal > valorMin && valorTotal < valorMax) ||
+                            valorTotal.equals(valorMin) || valorTotal.equals(valorMax);
+                })
+                .map(VeiculoMapper.INSTANCE::toDTO) // Mapeia para DTO
+                .toList();
+
+        // Junta dispositivos e veículos em uma lista única de produtos
+        List<Object> produtosFiltrados = new ArrayList<>();
+        produtosFiltrados.addAll(dispositivosFiltrados); // Adiciona dispositivos filtrados
+        produtosFiltrados.addAll(veiculosFiltrados); // Adiciona veículos filtrados
+
+        return produtosFiltrados;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Object> buscarProdutosPorPalavraChave(Long leilaoId, String palavraChave) {
+        Leilao leilao = leilaoRepository.findById(leilaoId)
+                .orElseThrow(() -> new RuntimeException("Leilão não encontrado"));
+
+        // Filtra dispositivos e veículos em listas separadas
+        List<DispositivoDTO> dispositivosFiltrados = filtrarDispositivosPorPalavraChave(leilao, palavraChave);
+        List<VeiculoDTO> veiculosFiltrados = filtrarVeiculosPorPalavraChave(leilao, palavraChave);
+
+        // Junta dispositivos e veículos em uma lista única de produtos
+        List<Object> produtosFiltrados = new ArrayList<>();
+        produtosFiltrados.addAll(dispositivosFiltrados);
+        produtosFiltrados.addAll(veiculosFiltrados);
+
+        return produtosFiltrados;
+    }
+
+    private List<DispositivoDTO> filtrarDispositivosPorPalavraChave(Leilao leilao, String palavraChave) {
+        return leilao.getDispositivos().stream()
+                .filter(dispositivo -> dispositivo.getNome() != null && dispositivo.getNome().toLowerCase().contains(palavraChave.toLowerCase()))
+                .map(DispositivoMapper.INSTANCE::toDTO)
+                .toList();
+    }
+
+    private List<VeiculoDTO> filtrarVeiculosPorPalavraChave(Leilao leilao, String palavraChave) {
+        return leilao.getVeiculos().stream()
+                .filter(veiculo -> veiculo.getModelo() != null && veiculo.getModelo().toLowerCase().contains(palavraChave.toLowerCase()))
+                .map(VeiculoMapper.INSTANCE::toDTO)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Object> buscarProdutosPorTipo(Long leilaoId, String tipoProduto) {
+        Leilao leilao = leilaoRepository.findById(leilaoId)
+                .orElseThrow(() -> new RuntimeException("Leilão não encontrado"));
+
+        List<Object> produtosFiltrados = new ArrayList<>();
+
+        // Filtra dispositivos pelo tipo
+        List<DispositivoDTO> dispositivosFiltrados = leilao.getDispositivos().stream()
+                .filter(dispositivo -> dispositivo.getTipo().toString().equalsIgnoreCase(tipoProduto))
+                .map(DispositivoMapper.INSTANCE::toDTO)
+                .toList();
+        produtosFiltrados.addAll(dispositivosFiltrados);
+
+        // Filtra veículos pelo tipo
+        List<VeiculoDTO> veiculosFiltrados = leilao.getVeiculos().stream()
+                .filter(veiculo -> veiculo.getTipo().toString().equalsIgnoreCase(tipoProduto))
+                .map(VeiculoMapper.INSTANCE::toDTO)
+                .toList();
+        produtosFiltrados.addAll(veiculosFiltrados);
+
+        return produtosFiltrados;
+    }
 
 }
