@@ -1,16 +1,13 @@
 package br.gov.sp.fatec.lp2.service;
 
 import br.gov.sp.fatec.lp2.entity.*;
-import br.gov.sp.fatec.lp2.entity.dto.DispositivoDTO;
-import br.gov.sp.fatec.lp2.entity.dto.LeilaoDTO;
-import br.gov.sp.fatec.lp2.entity.dto.LeilaoDetalhadoDTO;
-import br.gov.sp.fatec.lp2.entity.dto.VeiculoDTO;
+import br.gov.sp.fatec.lp2.entity.dto.*;
+import br.gov.sp.fatec.lp2.entity.enums.StatusLeilao;
 import br.gov.sp.fatec.lp2.mapper.DispositivoMapper;
 import br.gov.sp.fatec.lp2.mapper.LeilaoDetalhadoMapper;
 import br.gov.sp.fatec.lp2.mapper.LeilaoMapper;
 import br.gov.sp.fatec.lp2.mapper.VeiculoMapper;
-import br.gov.sp.fatec.lp2.repository.InstituicaoFinanceiraRepository;
-import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
+import br.gov.sp.fatec.lp2.repository.*;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -19,6 +16,9 @@ import io.micronaut.data.model.Sort;
 import io.micronaut.data.model.Sort.Order;
 import org.hibernate.Hibernate;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,7 +26,16 @@ import java.util.stream.Collectors;
 public class LeilaoService {
 
     @Inject
+    private LanceRepository lanceRepository;
+
+    @Inject
     private LeilaoRepository leilaoRepository;
+
+    @Inject
+    private VeiculoRepository veiculoRepository;
+
+    @Inject
+    private DispositivoRepository dispositivoRepository;
 
     @Inject
     private InstituicaoFinanceiraRepository instituicaoFinanceiraRepository;
@@ -240,6 +249,74 @@ public class LeilaoService {
         produtosFiltrados.addAll(veiculosFiltrados);
 
         return produtosFiltrados;
+    }
+
+    @Transactional
+    public LeilaoResumoDTO consultarDetalhesLeilao(Long leilaoId) {
+        // Buscar o objeto Leilao pelo ID
+        Leilao leilao = leilaoRepository.findById(leilaoId)
+                .orElseThrow(() -> new IllegalArgumentException("Leilão não encontrado."));
+
+        // Configurar o status do leilão baseado no horário de Brasília
+        ZoneId brasiliaZoneId = ZoneId.of("America/Sao_Paulo");
+        ZonedDateTime nowBrasilia = ZonedDateTime.now(brasiliaZoneId);
+        ZonedDateTime dataOcorrenciaBrasilia = leilao.getDataOcorrencia().atZone(brasiliaZoneId);
+        ZonedDateTime dataVisitaBrasilia = leilao.getDataVisita().atZone(brasiliaZoneId);
+
+        if (nowBrasilia.isBefore(dataOcorrenciaBrasilia)) {
+            leilao.setStatus(StatusLeilao.EM_ABERTO);
+        } else if (nowBrasilia.isAfter(dataOcorrenciaBrasilia) && nowBrasilia.isBefore(dataVisitaBrasilia)) {
+            leilao.setStatus(StatusLeilao.EM_ANDAMENTO);
+        } else {
+            leilao.setStatus(StatusLeilao.FINALIZADO);
+        }
+
+        // Lista para armazenar os vencedores
+        List<ProdutoVencedorDTO> produtosVencedores = new ArrayList<>();
+
+        // Buscar dispositivos do leilão e encontrar os lances vencedores
+        List<Dispositivo> dispositivos = dispositivoRepository.findByLeilaoIdWithLances(leilaoId);
+        for (Dispositivo dispositivo : dispositivos) {
+            Lance lanceVencedor = buscarMaiorLance(dispositivo.getLances());
+            if (lanceVencedor != null) {
+                ProdutoVencedorDTO vencedorDTO = new ProdutoVencedorDTO();
+                vencedorDTO.setProdutoId(dispositivo.getId());
+                vencedorDTO.setProdutoDescricao(dispositivo.getDescricao());
+                vencedorDTO.setValorVencedor(lanceVencedor.getValor());
+                vencedorDTO.setClienteNome(lanceVencedor.getCliente().getNome());
+                vencedorDTO.setTipoProduto("DISPOSITIVO");
+                produtosVencedores.add(vencedorDTO);
+            }
+        }
+
+        // Buscar veículos do leilão e encontrar os lances vencedores
+        List<Veiculo> veiculos = veiculoRepository.findByLeilaoIdWithLances(leilaoId);
+        for (Veiculo veiculo : veiculos) {
+            Lance lanceVencedor = buscarMaiorLance(veiculo.getLances());
+            if (lanceVencedor != null) {
+                ProdutoVencedorDTO vencedorDTO = new ProdutoVencedorDTO();
+                vencedorDTO.setProdutoId(veiculo.getId());
+                vencedorDTO.setProdutoDescricao(veiculo.getDescricao());
+                vencedorDTO.setValorVencedor(lanceVencedor.getValor());
+                vencedorDTO.setClienteNome(lanceVencedor.getCliente().getNome());
+                vencedorDTO.setTipoProduto("VEICULO");
+                produtosVencedores.add(vencedorDTO);
+            }
+        }
+
+        // Criar e retornar o resumo do leilão
+        LeilaoResumoDTO resumoDTO = new LeilaoResumoDTO();
+        resumoDTO.setLeilaoId(leilao.getId());
+        resumoDTO.setStatus(leilao.getStatus());
+        resumoDTO.setProdutosVencedores(produtosVencedores);
+
+        return resumoDTO;
+    }
+
+    private Lance buscarMaiorLance(List<Lance> lances) {
+        return lances.stream()
+                .max(Comparator.comparing(Lance::getValor))
+                .orElse(null);
     }
 
 }

@@ -1,10 +1,7 @@
 package br.gov.sp.fatec.lp2.controller;
 
 import br.gov.sp.fatec.lp2.entity.Leilao;
-import br.gov.sp.fatec.lp2.entity.dto.DispositivoDTO;
-import br.gov.sp.fatec.lp2.entity.dto.LeilaoDTO;
-import br.gov.sp.fatec.lp2.entity.dto.LeilaoDetalhadoDTO;
-import br.gov.sp.fatec.lp2.entity.dto.VeiculoDTO;
+import br.gov.sp.fatec.lp2.entity.dto.*;
 import br.gov.sp.fatec.lp2.mapper.LeilaoMapper;
 import br.gov.sp.fatec.lp2.service.LeilaoService;
 import io.micronaut.http.HttpResponse;
@@ -169,4 +166,8 @@ public class LeilaoController {
         return HttpResponse.ok(produtos);
     }
 
+    @Get("/detalhes-leilao/{leilaoId}")
+    public LeilaoResumoDTO obterDetalhesLeilao(@PathVariable Long leilaoId) {
+        return leilaoService.consultarDetalhesLeilao(leilaoId);
+    }
 }

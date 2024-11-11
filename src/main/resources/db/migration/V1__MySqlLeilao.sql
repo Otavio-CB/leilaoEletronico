@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS leilao
     endereco       VARCHAR(255),
     cidade         VARCHAR(255),
     estado         VARCHAR(255),
+    status_leilao  VARCHAR(255),
     CONSTRAINT pk_leilao PRIMARY KEY (id)
 );
 

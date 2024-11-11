@@ -1,5 +1,6 @@
 package br.gov.sp.fatec.lp2.entity;
 
+import br.gov.sp.fatec.lp2.entity.enums.StatusLeilao;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
@@ -40,11 +41,15 @@ public class Leilao {
     @Column
     private String estado;
 
-    @OneToMany(mappedBy = "leilao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Dispositivo> dispositivos = new ArrayList<>(); // Inicializando a lista
+    @Column(name = "status_leilao")
+    @Enumerated(EnumType.STRING)
+    private StatusLeilao status;
 
     @OneToMany(mappedBy = "leilao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Veiculo> veiculos = new ArrayList<>(); // Inicializando a lista
+    private List<Dispositivo> dispositivos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "leilao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Veiculo> veiculos = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "leilao_instituicao_financeira", joinColumns = @JoinColumn(name = "leilao_id"), inverseJoinColumns = @JoinColumn(name = "instituicao_financeira_id"))
