@@ -12,5 +12,5 @@ public class ProdutoVencedorDTO {
     private String produtoDescricao;
     private Double valorVencedor;
     private String clienteNome;
-    private String tipoProduto; // "DISPOSITIVO" ou "VEICULO"
+    private String tipoProduto;
 }

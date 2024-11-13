@@ -14,5 +14,5 @@ public class LanceHistoricoDTO implements Serializable {
     private Double valor;
     private String clienteNome;
     private String produtoDescricao;
-    private String produtoTipo; // "DISPOSITIVO" ou "VEICULO"
+    private String produtoTipo;
 }
