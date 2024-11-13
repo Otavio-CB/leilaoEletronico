@@ -1,6 +1,5 @@
 package br.gov.sp.fatec.lp2.controller;
 
-import br.gov.sp.fatec.lp2.entity.Veiculo;
 import br.gov.sp.fatec.lp2.entity.dto.VeiculoDTO;
 import br.gov.sp.fatec.lp2.service.VeiculoService;
 import io.micronaut.http.HttpResponse;
@@ -25,6 +24,7 @@ public class VeiculoController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = VeiculoDTO.class)))
     @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Post("/{leilaoId}")
     public HttpResponse<VeiculoDTO> criarVeiculo(@Body VeiculoDTO veiculoDTO, @PathVariable Long leilaoId) {
         VeiculoDTO criado = veiculoService.criarVeiculo(veiculoDTO, leilaoId);
@@ -35,6 +35,7 @@ public class VeiculoController {
     @ApiResponse(responseCode = "200", description = "Veículo encontrado",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = VeiculoDTO.class)))
     @ApiResponse(responseCode = "404", description = "Veículo não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{id}")
     public HttpResponse<VeiculoDTO> buscarVeiculo(@PathVariable Long id) {
         return veiculoService.buscarVeiculo(id)
@@ -46,6 +47,7 @@ public class VeiculoController {
     @ApiResponse(responseCode = "200", description = "Veículo atualizado com sucesso",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = VeiculoDTO.class)))
     @ApiResponse(responseCode = "404", description = "Veículo não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Put("/{id}")
     public HttpResponse<VeiculoDTO> atualizarVeiculo(@PathVariable Long id, @Body VeiculoDTO veiculoDTO) {
         return veiculoService.atualizarVeiculo(id, veiculoDTO)
@@ -57,6 +59,7 @@ public class VeiculoController {
     @Operation(summary = "Remove um veículo por ID")
     @ApiResponse(responseCode = "204", description = "Veículo removido com sucesso")
     @ApiResponse(responseCode = "404", description = "Veículo não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Delete("/{id}")
     public HttpResponse<Void> removerVeiculo(@PathVariable Long id) {
         if (veiculoService.removerVeiculo(id)) {
@@ -67,13 +70,13 @@ public class VeiculoController {
 
     @Operation(summary = "Reassocia um veículo a um novo leilão")
     @ApiResponse(responseCode = "200", description = "Veículo reassociado com sucesso",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Veiculo.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = VeiculoDTO.class)))
     @ApiResponse(responseCode = "400", description = "Não é possível reassociar um veículo vendido ou o novo leilão já ocorreu")
     @ApiResponse(responseCode = "404", description = "Veículo ou leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Put("/{id}/reassociar/{novoLeilaoId}")
     public HttpResponse<VeiculoDTO> reassociarVeiculo(@PathVariable Long id, @PathVariable Long novoLeilaoId) {
         VeiculoDTO reassociado = veiculoService.reassociarVeiculo(id, novoLeilaoId);
         return HttpResponse.ok().body(reassociado);
     }
-
 }

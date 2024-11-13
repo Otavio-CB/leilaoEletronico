@@ -26,6 +26,7 @@ public class LanceController {
     @ApiResponse(responseCode = "201", description = "Lance criado com sucesso",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = LanceDTO.class)))
     @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Post
     public HttpResponse<LanceDTO> criarLance(@Body LanceDTO lanceDTO) {
         LanceDTO criado = lanceService.criarLance(lanceDTO);
@@ -36,6 +37,7 @@ public class LanceController {
     @ApiResponse(responseCode = "200", description = "Lance encontrado",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = LanceDTO.class)))
     @ApiResponse(responseCode = "404", description = "Lance não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{id}")
     public HttpResponse<LanceDTO> buscarLance(@PathVariable Long id) {
         return lanceService.buscarLance(id)
@@ -43,6 +45,12 @@ public class LanceController {
                 .orElse(HttpResponse.status(HttpStatus.NOT_FOUND));
     }
 
+    @Operation(summary = "Busca o histórico de lances de um produto")
+    @ApiResponse(responseCode = "200", description = "Histórico de lances encontrado",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = LanceHistoricoDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos, verifique o tipo do produto")
+    @ApiResponse(responseCode = "404", description = "Produto não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{produtoId}/historico")
     public HttpResponse<List<LanceHistoricoDTO>> buscarHistoricoDeLances(
             @PathVariable Long produtoId,

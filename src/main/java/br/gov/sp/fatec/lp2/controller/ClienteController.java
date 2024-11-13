@@ -25,6 +25,7 @@ public class ClienteController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ClienteDTO.class)))
     @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Post
     public HttpResponse<ClienteDTO> criarCliente(@Body ClienteDTO clienteDTO) {
         ClienteDTO criado = clienteService.criarCliente(clienteDTO);
@@ -36,6 +37,7 @@ public class ClienteController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ClienteDTO.class)))
     @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{id}")
     public HttpResponse<ClienteDTO> buscarCliente(@PathVariable Long id) {
         return clienteService.buscarCliente(id)
@@ -43,13 +45,13 @@ public class ClienteController {
                 .orElse(HttpResponse.status(HttpStatus.NOT_FOUND));
     }
 
-
-    // NÃO ESTÁ FUNCIONANDO
     @Operation(summary = "Atualiza um cliente existente")
     @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ClienteDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Put("/{id}")
     public HttpResponse<ClienteDTO> atualizarCliente(@PathVariable Long id, @Body ClienteDTO clienteDTO) {
         return clienteService.atualizarCliente(id, clienteDTO)
@@ -60,6 +62,7 @@ public class ClienteController {
     @Operation(summary = "Remove um cliente existente")
     @ApiResponse(responseCode = "204", description = "Cliente removido com sucesso")
     @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Delete("/{id}")
     public HttpResponse<Void> removerCliente(@PathVariable Long id) {
         if (clienteService.removerCliente(id)) {

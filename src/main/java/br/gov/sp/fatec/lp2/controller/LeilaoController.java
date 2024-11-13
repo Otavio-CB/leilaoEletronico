@@ -29,6 +29,7 @@ public class LeilaoController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = LeilaoDTO.class)))
     @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Post
     public HttpResponse<LeilaoDTO> criarLeilao(@Body LeilaoDTO leilaoDTO) {
         LeilaoDTO criado = leilaoService.criarLeilao(leilaoDTO);
@@ -40,6 +41,7 @@ public class LeilaoController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = LeilaoDTO.class)))
     @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{id}")
     public HttpResponse<LeilaoDTO> buscarLeilao(@PathVariable Long id) {
         return leilaoService.buscarLeilao(id)
@@ -51,7 +53,9 @@ public class LeilaoController {
     @ApiResponse(responseCode = "200", description = "Leilão atualizado com sucesso",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = LeilaoDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Put("/{id}")
     public HttpResponse<LeilaoDTO> atualizarLeilao(@PathVariable Long id, @Body LeilaoDTO leilaoDTO) {
         return leilaoService.atualizarLeilao(id, leilaoDTO)
@@ -62,6 +66,7 @@ public class LeilaoController {
     @Operation(summary = "Remove um leilão por ID")
     @ApiResponse(responseCode = "204", description = "Leilão removido com sucesso")
     @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Delete("/{id}")
     public HttpResponse<Void> removerLeilao(@PathVariable Long id) {
         if (leilaoService.removerLeilao(id)) {
@@ -74,7 +79,9 @@ public class LeilaoController {
     @ApiResponse(responseCode = "200", description = "Instituição associada com sucesso",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = Leilao.class)))
+    @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "404", description = "Leilão ou instituição financeira não encontrada")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Put("/{id}/associar-instituicao/{instituicaoId}")
     public HttpResponse<Leilao> associarInstituicao(@PathVariable Long id, @PathVariable Long instituicaoId) {
         Leilao leilao = leilaoService.associarInstituicao(id, instituicaoId);
@@ -84,7 +91,8 @@ public class LeilaoController {
     @Operation(summary = "Lista todos os leilões ordenados por data de ocorrência")
     @ApiResponse(responseCode = "200", description = "Leilões listados com sucesso",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Leilao.class)))
+                    schema = @Schema(implementation = LeilaoDTO.class)))
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/ordenados-por-data")
     public HttpResponse<List<LeilaoDTO>> listarLeiloesOrdenadosPorData() {
         List<LeilaoDTO> leiloes = leilaoService.listarLeiloesOrdenadosPorData().stream()
@@ -93,6 +101,12 @@ public class LeilaoController {
         return HttpResponse.ok(leiloes);
     }
 
+    @Operation(summary = "Detalha um leilão")
+    @ApiResponse(responseCode = "200", description = "Detalhes do leilão encontrado",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = LeilaoDetalhadoDTO.class)))
+    @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{id}/detalhes")
     public HttpResponse<LeilaoDetalhadoDTO> detalharLeilao(@PathVariable Long id) {
         return leilaoService.detalharLeilao(id)
@@ -105,6 +119,7 @@ public class LeilaoController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = DispositivoDTO.class)))
     @ApiResponse(responseCode = "404", description = "Dispositivo ou leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{leilaoId}/dispositivos/{dispositivoId}")
     public HttpResponse<DispositivoDTO> detalharDispositivo(@PathVariable Long leilaoId, @PathVariable Long dispositivoId) {
         return leilaoService.detalharDispositivoNoLeilao(leilaoId, dispositivoId)
@@ -117,6 +132,7 @@ public class LeilaoController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = VeiculoDTO.class)))
     @ApiResponse(responseCode = "404", description = "Veículo ou leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{leilaoId}/veiculos/{veiculoId}")
     public HttpResponse<VeiculoDTO> detalharVeiculo(@PathVariable Long leilaoId, @PathVariable Long veiculoId) {
         return leilaoService.detalharVeiculoNoLeilao(leilaoId, veiculoId)
@@ -124,10 +140,12 @@ public class LeilaoController {
                 .orElse(HttpResponse.status(HttpStatus.NOT_FOUND));
     }
 
-    @Operation(summary = "Busca produtos (veículos e dispositivos) em um leilão por faixa de valor")
+    @Operation(summary = "Busca produtos em um leilão por faixa de valor")
     @ApiResponse(responseCode = "200", description = "Produtos encontrados",
             content = @Content(mediaType = "application/json"))
+    @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{leilaoId}/produtos/por-faixa-de-valor")
     public HttpResponse<List<Object>> buscarProdutosPorFaixaDeValor(
             @PathVariable Long leilaoId,
@@ -141,7 +159,9 @@ public class LeilaoController {
     @Operation(summary = "Busca produtos (veículos e dispositivos) em um leilão por faixa de valor considerando lances")
     @ApiResponse(responseCode = "200", description = "Produtos encontrados",
             content = @Content(mediaType = "application/json"))
+    @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{leilaoId}/produtos/por-faixa-de-valor-com-lances")
     public HttpResponse<List<Object>> buscarProdutosPorFaixaDeValorComLances(
             @PathVariable Long leilaoId,
@@ -152,11 +172,23 @@ public class LeilaoController {
         return HttpResponse.ok(produtos);
     }
 
+    @Operation(summary = "Busca produtos em um leilão por palavra-chave")
+    @ApiResponse(responseCode = "200", description = "Produtos encontrados",
+            content = @Content(mediaType = "application/json"))
+    @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+    @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{leilaoId}/produtos/por-palavra-chave")
     public List<Object> buscarProdutosPorPalavraChave(Long leilaoId, @QueryValue String palavraChave) {
         return leilaoService.buscarProdutosPorPalavraChave(leilaoId, palavraChave);
     }
 
+    @Operation(summary = "Busca produtos em um leilão por tipo")
+    @ApiResponse(responseCode = "200", description = "Produtos encontrados",
+            content = @Content(mediaType = "application/json"))
+    @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+    @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{leilaoId}/produtos/por-tipo")
     public HttpResponse<List<Object>> buscarProdutosPorTipo(
             @PathVariable Long leilaoId,
@@ -166,6 +198,12 @@ public class LeilaoController {
         return HttpResponse.ok(produtos);
     }
 
+    @Operation(summary = "Obtém detalhes do leilão")
+    @ApiResponse(responseCode = "200", description = "Detalhes do leilão encontrados",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = LeilaoResumoDTO.class)))
+    @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/detalhes-leilao/{leilaoId}")
     public LeilaoResumoDTO obterDetalhesLeilao(@PathVariable Long leilaoId) {
         return leilaoService.consultarDetalhesLeilao(leilaoId);

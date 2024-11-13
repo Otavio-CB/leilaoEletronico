@@ -25,6 +25,7 @@ public class InstituicaoFinanceiraController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = InstituicaoFinanceiraDTO.class)))
     @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Post
     public HttpResponse<InstituicaoFinanceiraDTO> criarInstituicaoFinanceira(@Body InstituicaoFinanceiraDTO instituicaoFinanceiraDTO) {
         InstituicaoFinanceiraDTO criado = instituicaoFinanceiraService.criarInstituicaoFinanceira(instituicaoFinanceiraDTO);
@@ -36,6 +37,7 @@ public class InstituicaoFinanceiraController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = InstituicaoFinanceiraDTO.class)))
     @ApiResponse(responseCode = "404", description = "Instituição financeira não encontrada")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{id}")
     public HttpResponse<InstituicaoFinanceiraDTO> buscarInstituicaoFinanceira(@PathVariable Long id) {
         return instituicaoFinanceiraService.buscarInstituicaoFinanceira(id)
@@ -47,7 +49,9 @@ public class InstituicaoFinanceiraController {
     @ApiResponse(responseCode = "200", description = "Instituição financeira atualizada com sucesso",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = InstituicaoFinanceiraDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "404", description = "Instituição financeira não encontrada")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Put("/{id}")
     public HttpResponse<InstituicaoFinanceiraDTO> atualizarInstituicaoFinanceira(@PathVariable Long id, @Body InstituicaoFinanceiraDTO instituicaoFinanceiraDTO) {
         return instituicaoFinanceiraService.atualizarInstituicaoFinanceira(id, instituicaoFinanceiraDTO)
@@ -58,6 +62,7 @@ public class InstituicaoFinanceiraController {
     @Operation(summary = "Remove uma instituição financeira por ID")
     @ApiResponse(responseCode = "204", description = "Instituição financeira removida com sucesso")
     @ApiResponse(responseCode = "404", description = "Instituição financeira não encontrada")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Delete("/{id}")
     public HttpResponse<Void> removerInstituicaoFinanceira(@PathVariable Long id) {
         if (instituicaoFinanceiraService.removerInstituicaoFinanceira(id)) {

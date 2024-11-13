@@ -25,6 +25,7 @@ public class DispositivoController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = DispositivoDTO.class)))
     @ApiResponse(responseCode = "400", description = "Leilão não encontrado ou dados inválidos")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Post("/{leilaoId}")
     public HttpResponse<DispositivoDTO> criarDispositivo(@Body DispositivoDTO dispositivoDTO, @PathVariable Long leilaoId) {
         DispositivoDTO criado = dispositivoService.criarDispositivo(dispositivoDTO, leilaoId);
@@ -36,6 +37,7 @@ public class DispositivoController {
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = DispositivoDTO.class)))
     @ApiResponse(responseCode = "404", description = "Dispositivo não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Get("/{id}")
     public HttpResponse<DispositivoDTO> buscarDispositivo(@PathVariable Long id) {
         return dispositivoService.buscarDispositivo(id)
@@ -43,12 +45,13 @@ public class DispositivoController {
                 .orElse(HttpResponse.status(HttpStatus.NOT_FOUND));
     }
 
-    // ESTÁ CRIANDO OUTRO DISPOSITIVO
     @Operation(summary = "Atualiza um dispositivo existente")
     @ApiResponse(responseCode = "200", description = "Dispositivo atualizado com sucesso",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = DispositivoDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "404", description = "Dispositivo não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Put("/{id}")
     public HttpResponse<DispositivoDTO> atualizarDispositivo(@PathVariable Long id, @Body DispositivoDTO dispositivoDTO) {
         return dispositivoService.atualizarDispositivo(id, dispositivoDTO)
@@ -59,6 +62,7 @@ public class DispositivoController {
     @Operation(summary = "Remove um dispositivo por ID")
     @ApiResponse(responseCode = "204", description = "Dispositivo removido com sucesso")
     @ApiResponse(responseCode = "404", description = "Dispositivo não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Delete("/{id}")
     public HttpResponse<Void> removerDispositivo(@PathVariable Long id) {
         if (dispositivoService.removerDispositivo(id)) {
@@ -73,6 +77,7 @@ public class DispositivoController {
                     schema = @Schema(implementation = DispositivoDTO.class)))
     @ApiResponse(responseCode = "400", description = "Erro de validação no leilão ou dispositivo")
     @ApiResponse(responseCode = "404", description = "Dispositivo ou leilão não encontrado")
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Put("/{id}/reassociar/{novoLeilaoId}")
     public HttpResponse<DispositivoDTO> reassociarDispositivo(@PathVariable Long id, @PathVariable Long novoLeilaoId) {
         DispositivoDTO reassociado = dispositivoService.reassociarDispositivo(id, novoLeilaoId);
