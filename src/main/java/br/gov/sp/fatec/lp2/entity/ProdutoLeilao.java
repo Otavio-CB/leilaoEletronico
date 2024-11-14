@@ -2,7 +2,10 @@ package br.gov.sp.fatec.lp2.entity;
 
 import io.micronaut.core.annotation.Introspected;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Introspected
 @Getter

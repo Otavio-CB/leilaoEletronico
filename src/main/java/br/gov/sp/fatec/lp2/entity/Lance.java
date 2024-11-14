@@ -32,7 +32,7 @@ public class Lance {
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    @ManyToOne(cascade = CascadeType.MERGE) // ou PERSIST, se fizer sentido
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "veiculo_id", referencedColumnName = "id")
     private Veiculo veiculo;
 
@@ -40,4 +40,3 @@ public class Lance {
     @JoinColumn(name = "dispositivo_id", referencedColumnName = "id")
     private Dispositivo dispositivo;
 }
-

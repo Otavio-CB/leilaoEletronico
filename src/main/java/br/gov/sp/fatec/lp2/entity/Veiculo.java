@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="veiculo")
+@Table(name = "veiculo")
 public class Veiculo extends ProdutoLeilao {
 
     @Column

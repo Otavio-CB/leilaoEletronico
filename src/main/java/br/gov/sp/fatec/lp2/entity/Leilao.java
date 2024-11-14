@@ -20,7 +20,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="leilao")
+@Table(name = "leilao")
 public class Leilao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +53,5 @@ public class Leilao {
 
     @ManyToMany
     @JoinTable(name = "leilao_instituicao_financeira", joinColumns = @JoinColumn(name = "leilao_id"), inverseJoinColumns = @JoinColumn(name = "instituicao_financeira_id"))
-    private List<InstituicaoFinanceira> instituicoesFinanceiras = new ArrayList<>(); // Inicializando a lista
-
+    private List<InstituicaoFinanceira> instituicoesFinanceiras = new ArrayList<>();
 }

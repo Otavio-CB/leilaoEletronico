@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Serdeable
 @Entity
 @Getter
@@ -29,6 +27,4 @@ public class Cliente {
 
     @Column
     private String senha;
-
-
 }
