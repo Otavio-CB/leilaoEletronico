@@ -19,4 +19,3 @@ public interface LanceMapper {
     @Mapping(source = "dispositivoId", target = "dispositivo.id")
     Lance toEntity(LanceDTO lanceDTO);
 }
-

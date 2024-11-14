@@ -16,4 +16,3 @@ public interface LeilaoDetalhadoMapper {
     @Mapping(target = "totalProdutos", expression = "java(leilao.getDispositivos().size() + leilao.getVeiculos().size())")
     LeilaoDetalhadoDTO toDTO(Leilao leilao);
 }
-
