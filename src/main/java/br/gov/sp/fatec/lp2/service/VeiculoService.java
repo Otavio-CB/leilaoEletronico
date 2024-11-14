@@ -1,6 +1,5 @@
 package br.gov.sp.fatec.lp2.service;
 
-import br.gov.sp.fatec.lp2.entity.Dispositivo;
 import br.gov.sp.fatec.lp2.entity.Leilao;
 import br.gov.sp.fatec.lp2.entity.Veiculo;
 import br.gov.sp.fatec.lp2.entity.dto.VeiculoDTO;

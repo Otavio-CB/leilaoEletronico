@@ -1,10 +1,16 @@
 package br.gov.sp.fatec.lp2.service;
 
-import br.gov.sp.fatec.lp2.entity.*;
+import br.gov.sp.fatec.lp2.entity.Cliente;
+import br.gov.sp.fatec.lp2.entity.Dispositivo;
+import br.gov.sp.fatec.lp2.entity.Lance;
+import br.gov.sp.fatec.lp2.entity.Veiculo;
+import br.gov.sp.fatec.lp2.entity.dto.LanceDTO;
 import br.gov.sp.fatec.lp2.entity.dto.LanceHistoricoDTO;
 import br.gov.sp.fatec.lp2.mapper.LanceMapper;
-import br.gov.sp.fatec.lp2.repository.*;
-import br.gov.sp.fatec.lp2.entity.dto.LanceDTO;
+import br.gov.sp.fatec.lp2.repository.ClienteRepository;
+import br.gov.sp.fatec.lp2.repository.DispositivoRepository;
+import br.gov.sp.fatec.lp2.repository.LanceRepository;
+import br.gov.sp.fatec.lp2.repository.VeiculoRepository;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -34,31 +40,26 @@ public class LanceService {
 
         lance.setDataHora(LocalDateTime.now());
 
-        // Associar o cliente
         Cliente cliente = clienteRepository.findById(lanceDTO.getClienteId())
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
         lance.setCliente(cliente);
 
-        // Verificar se pelo menos um produto (veiculo ou dispositivo) está presente
         if (lanceDTO.getVeiculoId() == null && lanceDTO.getDispositivoId() == null) {
             throw new IllegalArgumentException("É necessário associar um Veículo ou Dispositivo ao lance");
         }
 
-        // Verificar e carregar o Veiculo, se fornecido
         if (lanceDTO.getVeiculoId() != null) {
             Veiculo veiculo = veiculoRepository.findById(lanceDTO.getVeiculoId())
                     .orElseThrow(() -> new IllegalArgumentException("Veiculo não encontrado"));
             lance.setVeiculo(veiculo);  // O Veículo já está salvo e gerenciado pelo JPA
         }
 
-        // Verificar e carregar o Dispositivo, se fornecido
         if (lanceDTO.getDispositivoId() != null) {
             Dispositivo dispositivo = dispositivoRepository.findById(lanceDTO.getDispositivoId())
                     .orElseThrow(() -> new IllegalArgumentException("Dispositivo não encontrado"));
             lance.setDispositivo(dispositivo);  // O Dispositivo já está salvo e gerenciado pelo JPA
         }
 
-        // Salvar o lance
         lance = lanceRepository.save(lance);
         return LanceMapper.INSTANCE.toDTO(lance);
     }
