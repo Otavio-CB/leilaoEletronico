@@ -33,7 +33,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"nome\": \"Luiz Roberto Santos\",\n    \"email\": \"luiz.santos@example.com\",\n    \"senha\": \"senha321\"\n}",
+					"raw": "{\n    \"nome\": \"Vinicius Julia Junior\",\n    \"email\": \"vini.juju@example.com\",\n    \"senha\": \"senha321\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -248,7 +248,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"dataOcorrencia\": \"2024-10-13T10:00:00\",\n  \"dataVisita\": \"2024-10-12T10:00:00\",\n  \"endereco\": \"Rua Exemplo, 123\",\n  \"cidade\": \"São Paulo\",\n  \"estado\": \"SP\",\n  \"instituicaoFinanceiraIds\": [1]\n}\n",
+					"raw": "{\n  \"dataOcorrencia\": \"2024-11-10T22:00:00\",\n  \"dataVisita\": \"2024-11-12T22:00:00\",\n  \"endereco\": \"Rua Caramelo, 123\",\n  \"cidade\": \"Curitiba\",\n  \"estado\": \"PR\",\n  \"instituicaoFinanceiraIds\": [1]\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -277,7 +277,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"dataOcorrencia\": \"2024-10-13T10:00:00\",\n  \"dataVisita\": \"2024-10-12T10:00:00\",\n  \"endereco\": \"Rua Atualizada, 456\",\n  \"cidade\": \"Paraná\",\n  \"estado\": \"SP\",\n  \"instituicaoFinanceiraIds\": [1]\n}\n",
+					"raw": "{\n  \"dataOcorrencia\": \"2024-10-13T10:00:00\",\n  \"dataVisita\": \"2024-10-12T10:00:00\",\n  \"endereco\": \"Rua Atualizada, 456\",\n  \"cidade\": \"Manaus\",\n  \"estado\": \"AM\",\n  \"instituicaoFinanceiraIds\": [1]\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -314,7 +314,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/leiloes/1",
+					"raw": "http://localhost:8080/leiloes/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -322,7 +322,7 @@
 					"port": "8080",
 					"path": [
 						"leiloes",
-						"1"
+						"2"
 					]
 				}
 			},
@@ -355,7 +355,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"descricao\": \"Veículo em excelente estado\",\n  \"valorInicial\": 20000.0,\n  \"vendido\": false,\n  \"modelo\": \"Civic\",\n  \"marca\": \"Honda\",\n  \"tipo\": \"CARRO\"\n}\n",
+					"raw": "{\n  \"descricao\": \"Veículo Mitsubishi Lancer - Excelente estado\",\n  \"valorInicial\": 20000.0,\n  \"vendido\": false,\n  \"modelo\": \"Lancer\",\n  \"marca\": \"Mitsubishi\",\n  \"tipo\": \"CARRO\"\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -363,7 +363,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/veiculos/1",
+					"raw": "http://localhost:8080/veiculos/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -371,7 +371,7 @@
 					"port": "8080",
 					"path": [
 						"veiculos",
-						"1"
+						"3"
 					]
 				}
 			},
@@ -384,7 +384,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"descricao\": \"Veículo atualizado\",\n  \"valorInicial\": 21000.0,\n  \"vendido\": false,\n  \"modelo\": \"Civic\",\n  \"marca\": \"Honda\",\n  \"tipo\": \"CARRO\"\n}\n",
+					"raw": "{\n  \"descricao\": \"Veículo Mitsubishi Lancer - Excelente estado\",\n  \"valorInicial\": 20000.0,\n  \"vendido\": false,\n  \"modelo\": \"Lancer\",\n  \"marca\": \"Mitsubishi\",\n  \"tipo\": \"CARRO\"\n}\n\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -392,7 +392,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/veiculos/1",
+					"raw": "http://localhost:8080/veiculos/4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -400,7 +400,38 @@
 					"port": "8080",
 					"path": [
 						"veiculos",
-						"1"
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - veiculos leilão",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/veiculos/3/reassociar/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"veiculos",
+						"3",
+						"reassociar",
+						"4"
 					]
 				}
 			},
@@ -453,7 +484,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"descricao\": \"Notebook Dell XPS 13\",\n    \"valorInicial\": 2500.00,\n    \"vendido\": false,\n    \"nome\": \"Dell XPS 13\",\n    \"tipo\": \"NOTEBOOK\"\n}\n",
+					"raw": "{\n    \"descricao\": \"Notebook Lenovo Gaming 3\",\n    \"valorInicial\": 2500.00,\n    \"vendido\": false,\n    \"nome\": \"Lenovo Gaming 3\",\n    \"tipo\": \"NOTEBOOK\"\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -461,7 +492,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/dispositivos/1",
+					"raw": "http://localhost:8080/dispositivos/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -469,7 +500,7 @@
 					"port": "8080",
 					"path": [
 						"dispositivos",
-						"1"
+						"3"
 					]
 				}
 			},
@@ -482,7 +513,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"descricao\": \"Notebook Dell XPS 13 (Atualizado)\",\n    \"valorInicial\": 2300.00,\n    \"vendido\": true,\n    \"nome\": \"Dell XPS 13\",\n    \"tipo\": \"NOTEBOOK\"\n}\n",
+					"raw": "{\n    \"descricao\": \"Notebook Dell XPS 15\",\n    \"valorInicial\": 2800.00,\n    \"vendido\": true,\n    \"nome\": \"Dell XPS 15\",\n    \"tipo\": \"NOTEBOOK\"\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -490,7 +521,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/dispositivos/1",
+					"raw": "http://localhost:8080/dispositivos/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -498,7 +529,38 @@
 					"port": "8080",
 					"path": [
 						"dispositivos",
-						"1"
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - dispositivos leilão",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/dispositivos/2/reassociar/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dispositivos",
+						"2",
+						"reassociar",
+						"4"
 					]
 				}
 			},
@@ -510,7 +572,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/dispositivos/1",
+					"raw": "http://localhost:8080/dispositivos/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -518,7 +580,7 @@
 					"port": "8080",
 					"path": [
 						"dispositivos",
-						"1"
+						"3"
 					]
 				}
 			},
@@ -550,7 +612,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"valor\": 1500.00,\n    \"clienteId\": 1\n}\n",
+					"raw": "{\n    \"valor\": 2600.00,\n    \"clienteId\": 2,\n    \"veiculoId\": 2,\n    \"dispositivoId\": 2\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -572,40 +634,173 @@
 			"response": []
 		},
 		{
-			"name": "POST - lances",
+			"name": "GET - leilao-por-data",
 			"request": {
-				"method": "PUT",
+				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"valor\": 2000.00,\n    \"clienteId\": 1\n}\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "http://localhost:8080/lances",
+					"raw": "http://localhost:8080/leiloes/ordenados-por-data",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"lances"
+						"leiloes",
+						"ordenados-por-data"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "DELETE - lances",
+			"name": "GET - detalhes-leiloes-produtos-instituicao",
 			"request": {
-				"method": "DELETE",
+				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/lances/1",
+					"raw": "http://localhost:8080/leiloes/1/detalhes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"leiloes",
+						"1",
+						"detalhes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - valores-lances",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/leiloes/1/produtos/por-faixa-de-valor?valorMin=1000&valorMax=5000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"leiloes",
+						"1",
+						"produtos",
+						"por-faixa-de-valor"
+					],
+					"query": [
+						{
+							"key": "valorMin",
+							"value": "1000"
+						},
+						{
+							"key": "valorMax",
+							"value": "5000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - valores-lances-adicionais",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/leiloes/1/produtos/por-faixa-de-valor-com-lances?valorMin=1000&valorMax=50000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"leiloes",
+						"1",
+						"produtos",
+						"por-faixa-de-valor-com-lances"
+					],
+					"query": [
+						{
+							"key": "valorMin",
+							"value": "1000"
+						},
+						{
+							"key": "valorMax",
+							"value": "50000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - consulta-palavra-chave",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/leiloes/1/produtos/por-palavra-chave?palavraChave=lancer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"leiloes",
+						"1",
+						"produtos",
+						"por-palavra-chave"
+					],
+					"query": [
+						{
+							"key": "palavraChave",
+							"value": "lancer"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - consulta-tipo-produto",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/leiloes/1/produtos/por-tipo?tipoProduto=CARRO",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"leiloes",
+						"1",
+						"produtos",
+						"por-tipo"
+					],
+					"query": [
+						{
+							"key": "tipoProduto",
+							"value": "CARRO"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - lance-historico",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/lances/1/historico?tipoProduto=DISPOSITIVO",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -613,6 +808,55 @@
 					"port": "8080",
 					"path": [
 						"lances",
+						"1",
+						"historico"
+					],
+					"query": [
+						{
+							"key": "tipoProduto",
+							"value": "DISPOSITIVO"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - leilao-detalhado",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/leiloes/detalhes-leilao/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"leiloes",
+						"detalhes-leilao",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - DET-leiloes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/leiloes/exportar/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"leiloes",
+						"exportar",
 						"1"
 					]
 				}
