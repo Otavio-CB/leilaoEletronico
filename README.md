@@ -108,4 +108,4 @@ docker-compose down --volumes
 
 ## 📖 Documentação dos Endpoints
 
-[![Endpoints](https://img.shields.io/badge/📖_Documentação-Wiki-blue?style=for-the-badge)](https://github.com/usuario/repositorio/wiki/Endpoints)
+[![Endpoints](https://img.shields.io/badge/📖_Documentação-Wiki-blue?style=for-the-badge)](https://github.com/Otavio-CB/leilaoEletronico/wiki)
