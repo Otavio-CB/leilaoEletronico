@@ -3,10 +3,7 @@ package br.gov.sp.fatec.lp2.service;
 import br.gov.sp.fatec.lp2.entity.*;
 import br.gov.sp.fatec.lp2.entity.dto.*;
 import br.gov.sp.fatec.lp2.entity.enums.StatusLeilao;
-import br.gov.sp.fatec.lp2.mapper.DispositivoMapper;
-import br.gov.sp.fatec.lp2.mapper.LeilaoDetalhadoMapper;
-import br.gov.sp.fatec.lp2.mapper.LeilaoMapper;
-import br.gov.sp.fatec.lp2.mapper.VeiculoMapper;
+import br.gov.sp.fatec.lp2.mapper.*;
 import br.gov.sp.fatec.lp2.repository.*;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
@@ -38,6 +35,14 @@ public class LeilaoService {
 
     @Inject
     private InstituicaoFinanceiraRepository instituicaoFinanceiraRepository;
+
+    @Transactional
+    public LeilaoDETDTO montarLeilaoDet(Long id) {
+        Leilao leilao = leilaoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Leilão não encontrado"));
+
+        return LeilaoDETDTOMapper.INSTANCE.toLeilaoDETDTO(leilao);
+    }
 
     public LeilaoDTO criarLeilao(LeilaoDTO leilaoDTO) {
         Leilao leilao = LeilaoMapper.INSTANCE.toEntity(leilaoDTO);

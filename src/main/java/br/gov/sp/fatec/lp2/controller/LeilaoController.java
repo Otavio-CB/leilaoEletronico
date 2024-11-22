@@ -4,6 +4,7 @@ import br.gov.sp.fatec.lp2.entity.Leilao;
 import br.gov.sp.fatec.lp2.entity.dto.*;
 import br.gov.sp.fatec.lp2.mapper.LeilaoMapper;
 import br.gov.sp.fatec.lp2.service.LeilaoService;
+import br.gov.sp.fatec.lp2.utils.ExportUtil;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
@@ -14,6 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -207,5 +210,30 @@ public class LeilaoController {
     @Get("/detalhes-leilao/{leilaoId}")
     public LeilaoResumoDTO obterDetalhesLeilao(@PathVariable Long leilaoId) {
         return leilaoService.consultarDetalhesLeilao(leilaoId);
+    }
+
+    @Get("/exportar/{id}")
+    public HttpResponse<String> exportarLeilao(@PathVariable Long id) {
+        try {
+            LeilaoDETDTO leilaoDETDTO = leilaoService.montarLeilaoDet(id);
+
+            String projectPath = System.getProperty("user.dir");
+
+            String filePath = projectPath + "/src/main/resources/det/leilao_" + id + ".DET";
+
+            File directory = new File(projectPath + "/src/main/resources/det");
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            ExportUtil.exportLeilaoExportacaoToDetFile(leilaoDETDTO, filePath);
+
+            return HttpResponse.ok("Arquivo exportado com sucesso para: " + filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return HttpResponse.serverError("Erro ao exportar arquivo: " + e.getMessage());
+        } catch (RuntimeException e) {
+            return HttpResponse.notFound("Leilão não encontrado: " + e.getMessage());
+        }
     }
 }

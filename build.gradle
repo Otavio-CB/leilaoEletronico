@@ -36,6 +36,7 @@ dependencies {
     implementation("io.micronaut.flyway:micronaut-flyway")
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-mysql")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
     compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.mysql:mysql-connector-j")
