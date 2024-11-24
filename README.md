@@ -109,3 +109,4 @@ docker-compose down --volumes
 ## 📖 Documentação dos Endpoints
 
 [![Endpoints](https://img.shields.io/badge/📖_Documentação-Wiki-blue?style=for-the-badge)](https://github.com/Otavio-CB/leilaoEletronico/wiki/Home-%F0%9F%8F%A0)
+[![Swagger](https://img.shields.io/badge/📖_Swagger-Wiki-blue?style=for-the-badge)](http://localhost:8080/swagger/views/swagger-ui/)
