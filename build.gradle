@@ -30,7 +30,7 @@ dependencies {
     implementation("io.micronaut:micronaut-validation:3.10.3")
     implementation("org.projectlombok:lombok")
     implementation("io.micronaut:micronaut-validation")
-    implementation("io.swagger.core.v3:swagger-annotations:2.1.6")
+    implementation("io.swagger.core.v3:swagger-annotations")
     implementation("io.micronaut.openapi:micronaut-openapi:3.3.4")
     implementation("org.flywaydb:flyway-core")
     implementation("io.micronaut.flyway:micronaut-flyway")
@@ -78,4 +78,7 @@ micronaut {
     }
 }
 
-
+tasks.withType(JavaCompile) {
+    options.fork = true
+    options.forkOptions.jvmArgs << '-Dmicronaut.openapi.views.spec=rapidoc.enabled=true,swagger-ui.enabled=true,swagger-ui.theme=flattop'
+}
