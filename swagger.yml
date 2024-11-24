@@ -1,0 +1,1293 @@
+openapi: 3.0.1
+tags:
+- name: Instituição Financeira
+  description: Operações relacionadas às instituições financeiras
+- name: Leilão
+  description: Operações relacionadas aos leilões
+- name: Lance
+  description: Operações relacionadas aos lances
+- name: Cliente
+  description: Operações relacionadas aos clientes
+- name: Dispositivo
+  description: Operações relacionadas aos dispositivos em leilões
+- name: Veículo
+  description: Operações relacionadas aos veículos
+paths:
+  /clientes:
+    post:
+      tags:
+      - Cliente
+      summary: Cria um novo cliente
+      operationId: criarCliente
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClienteDTO"
+        required: true
+      responses:
+        "201":
+          description: Cliente criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClienteDTO"
+        "400":
+          description: Dados inválidos fornecidos
+        "500":
+          description: Erro interno do servidor
+  /clientes/{id}:
+    get:
+      tags:
+      - Cliente
+      summary: Busca um cliente por ID
+      operationId: buscarCliente
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Cliente encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClienteDTO"
+        "404":
+          description: Cliente não encontrado
+        "500":
+          description: Erro interno do servidor
+    put:
+      tags:
+      - Cliente
+      summary: Atualiza um cliente existente
+      operationId: atualizarCliente
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClienteDTO"
+        required: true
+      responses:
+        "200":
+          description: Cliente atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClienteDTO"
+        "400":
+          description: Dados inválidos fornecidos
+        "404":
+          description: Cliente não encontrado
+        "500":
+          description: Erro interno do servidor
+    delete:
+      tags:
+      - Cliente
+      summary: Remove um cliente existente
+      operationId: removerCliente
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Cliente removido com sucesso
+        "404":
+          description: Cliente não encontrado
+        "500":
+          description: Erro interno do servidor
+  /dispositivos/{id}:
+    get:
+      tags:
+      - Dispositivo
+      summary: Busca um dispositivo por ID
+      operationId: buscarDispositivo
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Dispositivo encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DispositivoDTO"
+        "404":
+          description: Dispositivo não encontrado
+        "500":
+          description: Erro interno do servidor
+    put:
+      tags:
+      - Dispositivo
+      summary: Atualiza um dispositivo existente
+      operationId: atualizarDispositivo
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DispositivoDTO"
+        required: true
+      responses:
+        "200":
+          description: Dispositivo atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DispositivoDTO"
+        "400":
+          description: Dados inválidos fornecidos
+        "404":
+          description: Dispositivo não encontrado
+        "500":
+          description: Erro interno do servidor
+    delete:
+      tags:
+      - Dispositivo
+      summary: Remove um dispositivo por ID
+      operationId: removerDispositivo
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Dispositivo removido com sucesso
+        "404":
+          description: Dispositivo não encontrado
+        "500":
+          description: Erro interno do servidor
+  /dispositivos/{id}/reassociar/{novoLeilaoId}:
+    put:
+      tags:
+      - Dispositivo
+      summary: Reassocia um dispositivo a um novo leilão
+      operationId: reassociarDispositivo
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: novoLeilaoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Dispositivo reassociado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DispositivoDTO"
+        "400":
+          description: Erro de validação no leilão ou dispositivo
+        "404":
+          description: Dispositivo ou leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+  /dispositivos/{leilaoId}:
+    post:
+      tags:
+      - Dispositivo
+      summary: Cria um novo dispositivo e associa a um leilão
+      operationId: criarDispositivo
+      parameters:
+      - name: leilaoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DispositivoDTO"
+        required: true
+      responses:
+        "201":
+          description: Dispositivo criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DispositivoDTO"
+        "400":
+          description: Leilão não encontrado ou dados inválidos
+        "500":
+          description: Erro interno do servidor
+  /instituicoes:
+    post:
+      tags:
+      - Instituição Financeira
+      summary: Cria uma nova instituição financeira
+      operationId: criarInstituicaoFinanceira
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InstituicaoFinanceiraDTO"
+        required: true
+      responses:
+        "201":
+          description: Instituição financeira criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstituicaoFinanceiraDTO"
+        "400":
+          description: Dados inválidos fornecidos
+        "500":
+          description: Erro interno do servidor
+  /instituicoes/{id}:
+    get:
+      tags:
+      - Instituição Financeira
+      summary: Busca uma instituição financeira por ID
+      operationId: buscarInstituicaoFinanceira
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Instituição financeira encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstituicaoFinanceiraDTO"
+        "404":
+          description: Instituição financeira não encontrada
+        "500":
+          description: Erro interno do servidor
+    put:
+      tags:
+      - Instituição Financeira
+      summary: Atualiza uma instituição financeira existente
+      operationId: atualizarInstituicaoFinanceira
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InstituicaoFinanceiraDTO"
+        required: true
+      responses:
+        "200":
+          description: Instituição financeira atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstituicaoFinanceiraDTO"
+        "400":
+          description: Dados inválidos fornecidos
+        "404":
+          description: Instituição financeira não encontrada
+        "500":
+          description: Erro interno do servidor
+    delete:
+      tags:
+      - Instituição Financeira
+      summary: Remove uma instituição financeira por ID
+      operationId: removerInstituicaoFinanceira
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Instituição financeira removida com sucesso
+        "404":
+          description: Instituição financeira não encontrada
+        "500":
+          description: Erro interno do servidor
+  /lances:
+    post:
+      tags:
+      - Lance
+      summary: Cria um novo lance
+      operationId: criarLance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LanceDTO"
+        required: true
+      responses:
+        "201":
+          description: Lance criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LanceDTO"
+        "400":
+          description: Dados inválidos fornecidos
+        "500":
+          description: Erro interno do servidor
+  /lances/{id}:
+    get:
+      tags:
+      - Lance
+      summary: Busca um lance por ID
+      operationId: buscarLance
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Lance encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LanceDTO"
+        "404":
+          description: Lance não encontrado
+        "500":
+          description: Erro interno do servidor
+  /lances/{produtoId}/historico:
+    get:
+      tags:
+      - Lance
+      summary: Busca o histórico de lances de um produto
+      operationId: buscarHistoricoDeLances
+      parameters:
+      - name: produtoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: tipoProduto
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Histórico de lances encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LanceHistoricoDTO"
+        "400":
+          description: "Dados inválidos fornecidos, verifique o tipo do produto"
+        "404":
+          description: Produto não encontrado
+        "500":
+          description: Erro interno do servidor
+  /leiloes:
+    post:
+      tags:
+      - Leilão
+      summary: Cria um novo leilão
+      operationId: criarLeilao
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeilaoDTO"
+        required: true
+      responses:
+        "201":
+          description: Leilão criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeilaoDTO"
+        "400":
+          description: Dados inválidos fornecidos
+        "500":
+          description: Erro interno do servidor
+  /leiloes/detalhes-leilao/{leilaoId}:
+    get:
+      tags:
+      - Leilão
+      summary: Obtém detalhes do leilão
+      operationId: obterDetalhesLeilao
+      parameters:
+      - name: leilaoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Detalhes do leilão encontrados
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeilaoResumoDTO"
+        "404":
+          description: Leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+  /leiloes/exportar/{id}:
+    get:
+      tags:
+      - Leilão
+      operationId: exportarLeilao
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: exportarLeilao 200 response
+          content:
+            application/json:
+              schema:
+                type: string
+  /leiloes/ordenados-por-data:
+    get:
+      tags:
+      - Leilão
+      summary: Lista todos os leilões ordenados por data de ocorrência
+      operationId: listarLeiloesOrdenadosPorData
+      responses:
+        "200":
+          description: Leilões listados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeilaoDTO"
+        "500":
+          description: Erro interno do servidor
+  /leiloes/{id}:
+    get:
+      tags:
+      - Leilão
+      summary: Busca um leilão por ID
+      operationId: buscarLeilao
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Leilão encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeilaoDTO"
+        "404":
+          description: Leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+    put:
+      tags:
+      - Leilão
+      summary: Atualiza um leilão existente
+      operationId: atualizarLeilao
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeilaoDTO"
+        required: true
+      responses:
+        "200":
+          description: Leilão atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeilaoDTO"
+        "400":
+          description: Dados inválidos fornecidos
+        "404":
+          description: Leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+    delete:
+      tags:
+      - Leilão
+      summary: Remove um leilão por ID
+      operationId: removerLeilao
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Leilão removido com sucesso
+        "404":
+          description: Leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+  /leiloes/{id}/associar-instituicao/{instituicaoId}:
+    put:
+      tags:
+      - Leilão
+      summary: Associa uma instituição financeira a um leilão
+      operationId: associarInstituicao
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: instituicaoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Instituição associada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Leilao"
+        "400":
+          description: Dados inválidos fornecidos
+        "404":
+          description: Leilão ou instituição financeira não encontrada
+        "500":
+          description: Erro interno do servidor
+  /leiloes/{id}/detalhes:
+    get:
+      tags:
+      - Leilão
+      summary: Detalha um leilão
+      operationId: detalharLeilao
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Detalhes do leilão encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeilaoDetalhadoDTO"
+        "404":
+          description: Leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+  /leiloes/{leilaoId}/dispositivos/{dispositivoId}:
+    get:
+      tags:
+      - Leilão
+      summary: Detalha um dispositivo associado ao leilão
+      operationId: detalharDispositivo
+      parameters:
+      - name: leilaoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: dispositivoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Dispositivo encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DispositivoDTO"
+        "404":
+          description: Dispositivo ou leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+  /leiloes/{leilaoId}/produtos/por-faixa-de-valor:
+    get:
+      tags:
+      - Leilão
+      summary: Busca produtos em um leilão por faixa de valor
+      operationId: buscarProdutosPorFaixaDeValor
+      parameters:
+      - name: leilaoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: valorMin
+        in: query
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: valorMax
+        in: query
+        required: true
+        schema:
+          type: number
+          format: double
+      responses:
+        "200":
+          description: Produtos encontrados
+          content:
+            application/json: {}
+        "400":
+          description: Dados inválidos fornecidos
+        "404":
+          description: Leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+  /leiloes/{leilaoId}/produtos/por-faixa-de-valor-com-lances:
+    get:
+      tags:
+      - Leilão
+      summary: Busca produtos (veículos e dispositivos) em um leilão por faixa de
+        valor considerando lances
+      operationId: buscarProdutosPorFaixaDeValorComLances
+      parameters:
+      - name: leilaoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: valorMin
+        in: query
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: valorMax
+        in: query
+        required: true
+        schema:
+          type: number
+          format: double
+      responses:
+        "200":
+          description: Produtos encontrados
+          content:
+            application/json: {}
+        "400":
+          description: Dados inválidos fornecidos
+        "404":
+          description: Leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+  /leiloes/{leilaoId}/produtos/por-palavra-chave:
+    get:
+      tags:
+      - Leilão
+      summary: Busca produtos em um leilão por palavra-chave
+      operationId: buscarProdutosPorPalavraChave
+      parameters:
+      - name: leilaoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: palavraChave
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Produtos encontrados
+          content:
+            application/json: {}
+        "400":
+          description: Dados inválidos fornecidos
+        "404":
+          description: Leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+  /leiloes/{leilaoId}/produtos/por-tipo:
+    get:
+      tags:
+      - Leilão
+      summary: Busca produtos em um leilão por tipo
+      operationId: buscarProdutosPorTipo
+      parameters:
+      - name: leilaoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: tipoProduto
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Produtos encontrados
+          content:
+            application/json: {}
+        "400":
+          description: Dados inválidos fornecidos
+        "404":
+          description: Leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+  /leiloes/{leilaoId}/veiculos/{veiculoId}:
+    get:
+      tags:
+      - Leilão
+      summary: Detalha um veículo associado ao leilão
+      operationId: detalharVeiculo
+      parameters:
+      - name: leilaoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: veiculoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Veículo encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VeiculoDTO"
+        "404":
+          description: Veículo ou leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+  /veiculos/{id}:
+    get:
+      tags:
+      - Veículo
+      summary: Busca um veículo por ID
+      operationId: buscarVeiculo
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Veículo encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VeiculoDTO"
+        "404":
+          description: Veículo não encontrado
+        "500":
+          description: Erro interno do servidor
+    put:
+      tags:
+      - Veículo
+      summary: Atualiza um veículo existente
+      operationId: atualizarVeiculo
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VeiculoDTO"
+        required: true
+      responses:
+        "200":
+          description: Veículo atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VeiculoDTO"
+        "404":
+          description: Veículo não encontrado
+        "500":
+          description: Erro interno do servidor
+    delete:
+      tags:
+      - Veículo
+      summary: Remove um veículo por ID
+      operationId: removerVeiculo
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Veículo removido com sucesso
+        "404":
+          description: Veículo não encontrado
+        "500":
+          description: Erro interno do servidor
+  /veiculos/{id}/reassociar/{novoLeilaoId}:
+    put:
+      tags:
+      - Veículo
+      summary: Reassocia um veículo a um novo leilão
+      operationId: reassociarVeiculo
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: novoLeilaoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Veículo reassociado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VeiculoDTO"
+        "400":
+          description: Não é possível reassociar um veículo vendido ou o novo leilão
+            já ocorreu
+        "404":
+          description: Veículo ou leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+  /veiculos/{leilaoId}:
+    post:
+      tags:
+      - Veículo
+      summary: Cria um novo veículo e o associa a um leilão
+      operationId: criarVeiculo
+      parameters:
+      - name: leilaoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VeiculoDTO"
+        required: true
+      responses:
+        "201":
+          description: Veículo criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VeiculoDTO"
+        "400":
+          description: Dados inválidos fornecidos
+        "404":
+          description: Leilão não encontrado
+        "500":
+          description: Erro interno do servidor
+components:
+  schemas:
+    Cliente:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          nullable: true
+        nome:
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+    ClienteDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+    Dispositivo:
+      type: object
+      allOf:
+      - $ref: "#/components/schemas/ProdutoLeilao"
+      - properties:
+          nome:
+            type: string
+          tipo:
+            $ref: "#/components/schemas/TipoDispositivo"
+          lances:
+            type: array
+            items:
+              $ref: "#/components/schemas/Lance"
+    DispositivoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        descricao:
+          type: string
+        valorInicial:
+          type: number
+          format: double
+        vendido:
+          type: boolean
+        nome:
+          type: string
+        tipo:
+          $ref: "#/components/schemas/TipoDispositivo"
+    InstituicaoFinanceira:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          nullable: true
+        nome:
+          type: string
+        cnpj:
+          type: string
+        leiloes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Leilao"
+    InstituicaoFinanceiraDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        cnpj:
+          type: string
+        endereco:
+          type: string
+    Lance:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          nullable: true
+        valor:
+          type: number
+          format: double
+        dataHora:
+          type: string
+          format: date-time
+        cliente:
+          nullable: true
+          allOf:
+          - $ref: "#/components/schemas/Cliente"
+        veiculo:
+          nullable: true
+          allOf:
+          - $ref: "#/components/schemas/Veiculo"
+        dispositivo:
+          nullable: true
+          allOf:
+          - $ref: "#/components/schemas/Dispositivo"
+    LanceDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        valor:
+          type: number
+          format: double
+        clienteId:
+          type: integer
+          format: int64
+        veiculoId:
+          type: integer
+          format: int64
+        dispositivoId:
+          type: integer
+          format: int64
+    LanceHistoricoDTO:
+      type: object
+      properties:
+        lanceId:
+          type: integer
+          format: int64
+        valor:
+          type: number
+          format: double
+        clienteNome:
+          type: string
+        produtoDescricao:
+          type: string
+        produtoTipo:
+          type: string
+    Leilao:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          nullable: true
+        dataOcorrencia:
+          type: string
+          format: date-time
+        dataVisita:
+          type: string
+          format: date-time
+        endereco:
+          type: string
+        cidade:
+          type: string
+        estado:
+          type: string
+        status:
+          $ref: "#/components/schemas/StatusLeilao"
+        dispositivos:
+          type: array
+          items:
+            $ref: "#/components/schemas/Dispositivo"
+        veiculos:
+          type: array
+          items:
+            $ref: "#/components/schemas/Veiculo"
+        instituicoesFinanceiras:
+          type: array
+          items:
+            $ref: "#/components/schemas/InstituicaoFinanceira"
+    LeilaoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        dataOcorrencia:
+          type: string
+          format: date-time
+        dataVisita:
+          type: string
+          format: date-time
+        endereco:
+          type: string
+        cidade:
+          type: string
+        estado:
+          type: string
+        instituicaoFinanceiraIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    LeilaoDetalhadoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        dataOcorrencia:
+          type: string
+          format: date-time
+        dataVisita:
+          type: string
+          format: date-time
+        endereco:
+          type: string
+        cidade:
+          type: string
+        estado:
+          type: string
+        produtos:
+          type: array
+          items:
+            $ref: "#/components/schemas/DispositivoDTO"
+        veiculos:
+          type: array
+          items:
+            $ref: "#/components/schemas/VeiculoDTO"
+        instituicoesFinanceiras:
+          type: array
+          items:
+            $ref: "#/components/schemas/InstituicaoFinanceiraDTO"
+        totalProdutos:
+          type: integer
+          format: int32
+    LeilaoResumoDTO:
+      type: object
+      properties:
+        leilaoId:
+          type: integer
+          format: int64
+        status:
+          $ref: "#/components/schemas/StatusLeilao"
+        produtosVencedores:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProdutoVencedorDTO"
+    ProdutoLeilao:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          nullable: true
+        descricao:
+          type: string
+        valorInicial:
+          type: number
+          format: double
+        vendido:
+          type: boolean
+        leilao:
+          nullable: true
+          allOf:
+          - $ref: "#/components/schemas/Leilao"
+    ProdutoVencedorDTO:
+      type: object
+      properties:
+        produtoId:
+          type: integer
+          format: int64
+        produtoDescricao:
+          type: string
+        valorVencedor:
+          type: number
+          format: double
+        clienteNome:
+          type: string
+        tipoProduto:
+          type: string
+    StatusLeilao:
+      type: string
+      enum:
+      - EM_ABERTO
+      - EM_ANDAMENTO
+      - FINALIZADO
+    TipoDispositivo:
+      type: string
+      enum:
+      - NOTEBOOK
+      - MONITOR
+      - HUB
+      - SWITCH
+      - ROTEADOR
+    TipoVeiculo:
+      type: string
+      enum:
+      - CARRO
+      - MOTOCICLETA
+      - CAMINHAO
+      - UTILITARIO
+    Veiculo:
+      type: object
+      allOf:
+      - $ref: "#/components/schemas/ProdutoLeilao"
+      - properties:
+          modelo:
+            type: string
+          marca:
+            type: string
+          tipo:
+            $ref: "#/components/schemas/TipoVeiculo"
+          lances:
+            type: array
+            items:
+              $ref: "#/components/schemas/Lance"
+    VeiculoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        descricao:
+          type: string
+        valorInicial:
+          type: number
+          format: double
+        vendido:
+          type: boolean
+        modelo:
+          type: string
+        marca:
+          type: string
+        tipo:
+          $ref: "#/components/schemas/TipoVeiculo"
