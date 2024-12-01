@@ -91,7 +91,13 @@ A API estará disponível em: [http://localhost:8080](http://localhost:8080)
 O arquivo `docker-compose.yml` já está configurado. Execute:
 
 ```bash
-docker-compose up --build
+docker-compose up --build -d
+```
+
+**Importante:** O comando acima inicializa apenas o banco de dados. Para rodar a aplicação, execute o seguinte comando em um terminal separado na pasta da aplicação:
+
+```bash
+./gradlew run
 ```
 
 ### **3. Parar os Contêineres**
@@ -103,8 +109,6 @@ docker-compose down
 ```bash
 docker-compose down --volumes
 ```
-
----
 
 ## 📖 Documentação dos Endpoints
 
