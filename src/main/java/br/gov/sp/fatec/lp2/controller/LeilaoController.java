@@ -34,9 +34,9 @@ public class LeilaoController {
     @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Post
-    public HttpResponse<LeilaoDTO> criarLeilao(@Body LeilaoDTO leilaoDTO) {
-        LeilaoDTO criado = leilaoService.criarLeilao(leilaoDTO);
-        return HttpResponse.status(HttpStatus.CREATED).body(criado);
+    public HttpResponse<List<LeilaoDTO>> criarLeiloes(@Body List<LeilaoDTO> leiloesDTO) {
+        List<LeilaoDTO> criados = leilaoService.criarLeiloes(leiloesDTO);
+        return HttpResponse.status(HttpStatus.CREATED).body(criados);
     }
 
     @Operation(summary = "Busca um leilão por ID")

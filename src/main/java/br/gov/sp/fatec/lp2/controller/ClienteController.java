@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
+import java.util.List;
+
 
 @Controller("/clientes")
 @Tag(name = "Cliente", description = "Operações relacionadas aos clientes")
@@ -27,9 +29,9 @@ public class ClienteController {
     @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Post
-    public HttpResponse<ClienteDTO> criarCliente(@Body ClienteDTO clienteDTO) {
-        ClienteDTO criado = clienteService.criarCliente(clienteDTO);
-        return HttpResponse.status(HttpStatus.CREATED).body(criado);
+    public HttpResponse<List<ClienteDTO>> criarClientes(@Body List<ClienteDTO> clienteDTOs) {
+        List<ClienteDTO> criados = clienteService.criarClientes(clienteDTOs);
+        return HttpResponse.status(HttpStatus.CREATED).body(criados);
     }
 
     @Operation(summary = "Busca um cliente por ID")

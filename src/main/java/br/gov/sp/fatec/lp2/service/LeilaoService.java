@@ -44,17 +44,25 @@ public class LeilaoService {
         return LeilaoDETDTOMapper.INSTANCE.toLeilaoDETDTO(leilao);
     }
 
-    public LeilaoDTO criarLeilao(LeilaoDTO leilaoDTO) {
-        Leilao leilao = LeilaoMapper.INSTANCE.toEntity(leilaoDTO);
+    public List<LeilaoDTO> criarLeiloes(List<LeilaoDTO> leiloesDTO) {
+        List<Leilao> leiloes = leiloesDTO.stream()
+                .map(leilaoDTO -> {
+                    Leilao leilao = LeilaoMapper.INSTANCE.toEntity(leilaoDTO);
 
-        List<InstituicaoFinanceira> instituicoes = leilaoDTO.getInstituicaoFinanceiraIds().stream()
-                .map(id -> instituicaoFinanceiraRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Instituição financeira não encontrada")))
+                    List<InstituicaoFinanceira> instituicoes = leilaoDTO.getInstituicaoFinanceiraIds().stream()
+                            .map(id -> instituicaoFinanceiraRepository.findById(id)
+                                    .orElseThrow(() -> new RuntimeException("Instituição financeira não encontrada")))
+                            .collect(Collectors.toList());
+
+                    leilao.setInstituicoesFinanceiras(instituicoes);
+                    return leilao;
+                })
                 .collect(Collectors.toList());
 
-        leilao.setInstituicoesFinanceiras(instituicoes);
-        Leilao leilaoSalvo = leilaoRepository.save(leilao);
-        return LeilaoMapper.INSTANCE.toDTO(leilaoSalvo);
+        leiloes = leilaoRepository.saveAll(leiloes);
+        return leiloes.stream()
+                .map(leilao -> LeilaoMapper.INSTANCE.toDTO(leilao))
+                .collect(Collectors.toList());
     }
 
     public Optional<LeilaoDTO> buscarLeilao(Long id) {

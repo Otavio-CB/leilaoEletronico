@@ -28,9 +28,9 @@ public class LanceController {
     @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Post
-    public HttpResponse<LanceDTO> criarLance(@Body LanceDTO lanceDTO) {
-        LanceDTO criado = lanceService.criarLance(lanceDTO);
-        return HttpResponse.status(HttpStatus.CREATED).body(criado);
+    public HttpResponse<List<LanceDTO>> criarLances(@Body List<LanceDTO> lancesDTO) {
+        List<LanceDTO> criados = lanceService.criarLances(lancesDTO);
+        return HttpResponse.status(HttpStatus.CREATED).body(criados);
     }
 
     @Operation(summary = "Busca um lance por ID")

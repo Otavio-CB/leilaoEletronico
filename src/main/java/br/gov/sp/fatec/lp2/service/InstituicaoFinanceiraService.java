@@ -7,7 +7,9 @@ import br.gov.sp.fatec.lp2.repository.InstituicaoFinanceiraRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Singleton
 public class InstituicaoFinanceiraService {
@@ -15,10 +17,14 @@ public class InstituicaoFinanceiraService {
     @Inject
     private InstituicaoFinanceiraRepository instituicaoFinanceiraRepository;
 
-    public InstituicaoFinanceiraDTO criarInstituicaoFinanceira(InstituicaoFinanceiraDTO instituicaoFinanceiraDTO) {
-        InstituicaoFinanceira instituicao = InstituicaoFinanceiraMapper.INSTANCE.toEntity(instituicaoFinanceiraDTO);
-        InstituicaoFinanceira novaInstituicao = instituicaoFinanceiraRepository.save(instituicao);
-        return InstituicaoFinanceiraMapper.INSTANCE.toDTO(novaInstituicao);
+    public List<InstituicaoFinanceiraDTO> criarInstituicoesFinanceiras(List<InstituicaoFinanceiraDTO> instituicoesFinanceirasDTO) {
+        List<InstituicaoFinanceira> instituicoesFinanceiras = instituicoesFinanceirasDTO.stream()
+                .map(instituicaoFinanceiraDTO -> InstituicaoFinanceiraMapper.INSTANCE.toEntity(instituicaoFinanceiraDTO))
+                .collect(Collectors.toList());
+        instituicoesFinanceiras = instituicaoFinanceiraRepository.saveAll(instituicoesFinanceiras);
+        return instituicoesFinanceiras.stream()
+                .map(instituicao -> InstituicaoFinanceiraMapper.INSTANCE.toDTO(instituicao))
+                .collect(Collectors.toList());
     }
 
     public Optional<InstituicaoFinanceiraDTO> buscarInstituicaoFinanceira(Long id) {

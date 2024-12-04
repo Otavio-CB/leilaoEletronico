@@ -35,33 +35,41 @@ public class LanceService {
     @Inject
     private DispositivoRepository dispositivoRepository;
 
-    public LanceDTO criarLance(LanceDTO lanceDTO) {
-        Lance lance = LanceMapper.INSTANCE.toEntity(lanceDTO);
+    public List<LanceDTO> criarLances(List<LanceDTO> lancesDTO) {
+        List<Lance> lances = lancesDTO.stream()
+                .map(lanceDTO -> {
+                    Lance lance = LanceMapper.INSTANCE.toEntity(lanceDTO);
 
-        lance.setDataHora(LocalDateTime.now());
+                    lance.setDataHora(LocalDateTime.now());
 
-        Cliente cliente = clienteRepository.findById(lanceDTO.getClienteId())
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
-        lance.setCliente(cliente);
+                    Cliente cliente = clienteRepository.findById(lanceDTO.getClienteId())
+                            .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+                    lance.setCliente(cliente);
 
-        if (lanceDTO.getVeiculoId() == null && lanceDTO.getDispositivoId() == null) {
-            throw new IllegalArgumentException("É necessário associar um Veículo ou Dispositivo ao lance");
-        }
+                    if (lanceDTO.getVeiculoId() == null && lanceDTO.getDispositivoId() == null) {
+                        throw new IllegalArgumentException("É necessário associar um Veículo ou Dispositivo ao lance");
+                    }
 
-        if (lanceDTO.getVeiculoId() != null) {
-            Veiculo veiculo = veiculoRepository.findById(lanceDTO.getVeiculoId())
-                    .orElseThrow(() -> new IllegalArgumentException("Veiculo não encontrado"));
-            lance.setVeiculo(veiculo);  // O Veículo já está salvo e gerenciado pelo JPA
-        }
+                    if (lanceDTO.getVeiculoId() != null) {
+                        Veiculo veiculo = veiculoRepository.findById(lanceDTO.getVeiculoId())
+                                .orElseThrow(() -> new IllegalArgumentException("Veiculo não encontrado"));
+                        lance.setVeiculo(veiculo);
+                    }
 
-        if (lanceDTO.getDispositivoId() != null) {
-            Dispositivo dispositivo = dispositivoRepository.findById(lanceDTO.getDispositivoId())
-                    .orElseThrow(() -> new IllegalArgumentException("Dispositivo não encontrado"));
-            lance.setDispositivo(dispositivo);  // O Dispositivo já está salvo e gerenciado pelo JPA
-        }
+                    if (lanceDTO.getDispositivoId() != null) {
+                        Dispositivo dispositivo = dispositivoRepository.findById(lanceDTO.getDispositivoId())
+                                .orElseThrow(() -> new IllegalArgumentException("Dispositivo não encontrado"));
+                        lance.setDispositivo(dispositivo);
+                    }
 
-        lance = lanceRepository.save(lance);
-        return LanceMapper.INSTANCE.toDTO(lance);
+                    return lance;
+                })
+                .collect(Collectors.toList());
+
+        lances = lanceRepository.saveAll(lances);
+        return lances.stream()
+                .map(lance -> LanceMapper.INSTANCE.toDTO(lance))
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

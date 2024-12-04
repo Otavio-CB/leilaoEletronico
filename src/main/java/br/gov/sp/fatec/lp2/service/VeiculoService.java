@@ -10,7 +10,9 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Singleton
 public class VeiculoService {
@@ -21,13 +23,22 @@ public class VeiculoService {
     @Inject
     private LeilaoRepository leilaoRepository;
 
-    public VeiculoDTO criarVeiculo(VeiculoDTO veiculoDTO, Long leilaoId) {
+    public List<VeiculoDTO> criarVeiculos(List<VeiculoDTO> veiculosDTO, Long leilaoId) {
         Leilao leilao = leilaoRepository.findById(leilaoId)
                 .orElseThrow(() -> new RuntimeException("Leilão não encontrado"));
-        Veiculo veiculo = VeiculoMapper.INSTANCE.toEntity(veiculoDTO);
-        veiculo.setLeilao(leilao);
-        Veiculo veiculoSalvo = veiculoRepository.save(veiculo);
-        return VeiculoMapper.INSTANCE.toDTO(veiculoSalvo);
+
+        List<Veiculo> veiculos = veiculosDTO.stream()
+                .map(veiculoDTO -> {
+                    Veiculo veiculo = VeiculoMapper.INSTANCE.toEntity(veiculoDTO);
+                    veiculo.setLeilao(leilao);
+                    return veiculo;
+                })
+                .collect(Collectors.toList());
+
+        veiculos = veiculoRepository.saveAll(veiculos);
+        return veiculos.stream()
+                .map(veiculo -> VeiculoMapper.INSTANCE.toDTO(veiculo))
+                .collect(Collectors.toList());
     }
 
     public Optional<VeiculoDTO> buscarVeiculo(Long id) {

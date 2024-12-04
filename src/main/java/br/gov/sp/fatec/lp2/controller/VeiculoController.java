@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
+import java.util.List;
+
 @Controller("/veiculos")
 @Tag(name = "Veículo", description = "Operações relacionadas aos veículos")
 public class VeiculoController {
@@ -26,9 +28,9 @@ public class VeiculoController {
     @ApiResponse(responseCode = "404", description = "Leilão não encontrado")
     @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Post("/{leilaoId}")
-    public HttpResponse<VeiculoDTO> criarVeiculo(@Body VeiculoDTO veiculoDTO, @PathVariable Long leilaoId) {
-        VeiculoDTO criado = veiculoService.criarVeiculo(veiculoDTO, leilaoId);
-        return HttpResponse.status(HttpStatus.CREATED).body(criado);
+    public HttpResponse<List<VeiculoDTO>> criarVeiculos(@Body List<VeiculoDTO> veiculosDTO, @PathVariable Long leilaoId) {
+        List<VeiculoDTO> criados = veiculoService.criarVeiculos(veiculosDTO, leilaoId);
+        return HttpResponse.status(HttpStatus.CREATED).body(criados);
     }
 
     @Operation(summary = "Busca um veículo por ID")

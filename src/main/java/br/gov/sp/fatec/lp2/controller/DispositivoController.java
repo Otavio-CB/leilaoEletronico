@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
+import java.util.List;
+
 
 @Controller("/dispositivos")
 @Tag(name = "Dispositivo", description = "Operações relacionadas aos dispositivos em leilões")
@@ -27,9 +29,9 @@ public class DispositivoController {
     @ApiResponse(responseCode = "400", description = "Leilão não encontrado ou dados inválidos")
     @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Post("/{leilaoId}")
-    public HttpResponse<DispositivoDTO> criarDispositivo(@Body DispositivoDTO dispositivoDTO, @PathVariable Long leilaoId) {
-        DispositivoDTO criado = dispositivoService.criarDispositivo(dispositivoDTO, leilaoId);
-        return HttpResponse.status(HttpStatus.CREATED).body(criado);
+    public HttpResponse<List<DispositivoDTO>> criarDispositivos(@Body List<DispositivoDTO> dispositivosDTO, @PathVariable Long leilaoId) {
+        List<DispositivoDTO> criados = dispositivoService.criarDispositivos(dispositivosDTO, leilaoId);
+        return HttpResponse.status(HttpStatus.CREATED).body(criados);
     }
 
     @Operation(summary = "Busca um dispositivo por ID")

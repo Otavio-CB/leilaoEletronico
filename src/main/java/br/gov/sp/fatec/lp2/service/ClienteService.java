@@ -8,7 +8,9 @@ import io.micronaut.context.annotation.Requires;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Requires(beans = ClienteRepository.class)
 @Singleton
@@ -17,10 +19,14 @@ public class ClienteService {
     @Inject
     private ClienteRepository clienteRepository;
 
-    public ClienteDTO criarCliente(ClienteDTO clienteDTO) {
-        Cliente cliente = ClienteMapper.INSTANCE.toEntity(clienteDTO);
-        cliente = clienteRepository.save(cliente);
-        return ClienteMapper.INSTANCE.toDTO(cliente);
+    public List<ClienteDTO> criarClientes(List<ClienteDTO> clienteDTOs) {
+        List<Cliente> clientes = clienteDTOs.stream()
+                .map(clienteDTO -> ClienteMapper.INSTANCE.toEntity(clienteDTO))
+                .collect(Collectors.toList());
+        clientes = clienteRepository.saveAll(clientes);
+        return clientes.stream()
+                .map(cliente -> ClienteMapper.INSTANCE.toDTO(cliente))
+                .collect(Collectors.toList());
     }
 
     public Optional<ClienteDTO> buscarCliente(Long id) {

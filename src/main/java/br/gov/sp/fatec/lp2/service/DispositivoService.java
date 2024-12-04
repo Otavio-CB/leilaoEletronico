@@ -10,7 +10,9 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Singleton
 public class DispositivoService {
@@ -21,13 +23,22 @@ public class DispositivoService {
     @Inject
     private LeilaoRepository leilaoRepository;
 
-    public DispositivoDTO criarDispositivo(DispositivoDTO dispositivoDTO, Long leilaoId) {
-        Dispositivo dispositivo = DispositivoMapper.INSTANCE.toEntity(dispositivoDTO);
+    public List<DispositivoDTO> criarDispositivos(List<DispositivoDTO> dispositivosDTO, Long leilaoId) {
         Leilao leilao = leilaoRepository.findById(leilaoId)
                 .orElseThrow(() -> new RuntimeException("Leilão não encontrado"));
-        dispositivo.setLeilao(leilao);
-        dispositivo = dispositivoRepository.save(dispositivo);
-        return DispositivoMapper.INSTANCE.toDTO(dispositivo);
+
+        List<Dispositivo> dispositivos = dispositivosDTO.stream()
+                .map(dispositivoDTO -> {
+                    Dispositivo dispositivo = DispositivoMapper.INSTANCE.toEntity(dispositivoDTO);
+                    dispositivo.setLeilao(leilao);
+                    return dispositivo;
+                })
+                .collect(Collectors.toList());
+
+        dispositivos = dispositivoRepository.saveAll(dispositivos);
+        return dispositivos.stream()
+                .map(dispositivo -> DispositivoMapper.INSTANCE.toDTO(dispositivo))
+                .collect(Collectors.toList());
     }
 
     public Optional<DispositivoDTO> buscarDispositivo(Long id) {

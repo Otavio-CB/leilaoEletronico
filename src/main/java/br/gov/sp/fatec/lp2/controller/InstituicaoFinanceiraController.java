@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
+import java.util.List;
+
 
 @Controller("/instituicoes")
 @Tag(name = "Instituição Financeira", description = "Operações relacionadas às instituições financeiras")
@@ -27,9 +29,9 @@ public class InstituicaoFinanceiraController {
     @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     @Post
-    public HttpResponse<InstituicaoFinanceiraDTO> criarInstituicaoFinanceira(@Body InstituicaoFinanceiraDTO instituicaoFinanceiraDTO) {
-        InstituicaoFinanceiraDTO criado = instituicaoFinanceiraService.criarInstituicaoFinanceira(instituicaoFinanceiraDTO);
-        return HttpResponse.status(HttpStatus.CREATED).body(criado);
+    public HttpResponse<List<InstituicaoFinanceiraDTO>> criarInstituicoesFinanceiras(@Body List<InstituicaoFinanceiraDTO> instituicoesFinanceirasDTO) {
+        List<InstituicaoFinanceiraDTO> criadas = instituicaoFinanceiraService.criarInstituicoesFinanceiras(instituicoesFinanceirasDTO);
+        return HttpResponse.status(HttpStatus.CREATED).body(criadas);
     }
 
     @Operation(summary = "Busca uma instituição financeira por ID")
