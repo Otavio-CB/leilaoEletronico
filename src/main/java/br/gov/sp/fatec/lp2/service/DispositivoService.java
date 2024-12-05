@@ -3,6 +3,10 @@ package br.gov.sp.fatec.lp2.service;
 import br.gov.sp.fatec.lp2.entity.Dispositivo;
 import br.gov.sp.fatec.lp2.entity.Leilao;
 import br.gov.sp.fatec.lp2.entity.dto.DispositivoDTO;
+import br.gov.sp.fatec.lp2.exceptions.dispositivo.DispositivoNaoEncontradoException;
+import br.gov.sp.fatec.lp2.exceptions.dispositivo.DispositivoVendidoException;
+import br.gov.sp.fatec.lp2.exceptions.leilao.LeilaoNaoEncontradoException;
+import br.gov.sp.fatec.lp2.exceptions.leilao.LeilaoOcorridoException;
 import br.gov.sp.fatec.lp2.mapper.DispositivoMapper;
 import br.gov.sp.fatec.lp2.repository.DispositivoRepository;
 import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
@@ -25,7 +29,7 @@ public class DispositivoService {
 
     public List<DispositivoDTO> criarDispositivos(List<DispositivoDTO> dispositivosDTO, Long leilaoId) {
         Leilao leilao = leilaoRepository.findById(leilaoId)
-                .orElseThrow(() -> new RuntimeException("Leilão não encontrado"));
+                .orElseThrow(() -> new LeilaoNaoEncontradoException(leilaoId));
 
         List<Dispositivo> dispositivos = dispositivosDTO.stream()
                 .map(dispositivoDTO -> {
@@ -42,17 +46,18 @@ public class DispositivoService {
     }
 
     public Optional<DispositivoDTO> buscarDispositivo(Long id) {
-        return dispositivoRepository.findById(id)
-                .map(DispositivoMapper.INSTANCE::toDTO);
+        return Optional.ofNullable(dispositivoRepository.findById(id)
+                .map(DispositivoMapper.INSTANCE::toDTO)
+                .orElseThrow(() -> new DispositivoNaoEncontradoException(id)));
     }
 
     public Optional<DispositivoDTO> atualizarDispositivo(Long id, DispositivoDTO dispositivoDTO) {
-        return dispositivoRepository.findById(id).map(dispositivoExistente -> {
+        return Optional.ofNullable(dispositivoRepository.findById(id).map(dispositivoExistente -> {
             dispositivoDTO.setId(id);
             DispositivoMapper.INSTANCE.toEntity(dispositivoDTO, dispositivoExistente);
             Dispositivo atualizado = dispositivoRepository.update(dispositivoExistente);
             return DispositivoMapper.INSTANCE.toDTO(atualizado);
-        });
+        }).orElseThrow(() -> new DispositivoNaoEncontradoException(id)));
     }
 
     public boolean removerDispositivo(Long id) {
@@ -61,22 +66,22 @@ public class DispositivoService {
             dispositivoRepository.deleteById(id);
             return true;
         }
-        return false;
+        throw new DispositivoNaoEncontradoException(id);
     }
 
     public DispositivoDTO reassociarDispositivo(Long id, Long novoLeilaoId) {
         Dispositivo dispositivo = dispositivoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Dispositivo não encontrado"));
+                .orElseThrow(() -> new DispositivoNaoEncontradoException(id));
 
         if (dispositivo.isVendido()) {
-            throw new RuntimeException("Dispositivo já foi vendido");
+            throw new DispositivoVendidoException();
         }
 
         Leilao novoLeilao = leilaoRepository.findById(novoLeilaoId)
-                .orElseThrow(() -> new RuntimeException("Novo leilão não encontrado"));
+                .orElseThrow(() -> new LeilaoNaoEncontradoException(novoLeilaoId));
 
         if (novoLeilao.getDataOcorrencia().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("O novo leilão já ocorreu");
+            throw new LeilaoOcorridoException();
         }
 
         dispositivo.setLeilao(novoLeilao);

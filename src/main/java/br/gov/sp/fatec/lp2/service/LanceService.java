@@ -6,6 +6,8 @@ import br.gov.sp.fatec.lp2.entity.Lance;
 import br.gov.sp.fatec.lp2.entity.Veiculo;
 import br.gov.sp.fatec.lp2.entity.dto.LanceDTO;
 import br.gov.sp.fatec.lp2.entity.dto.LanceHistoricoDTO;
+import br.gov.sp.fatec.lp2.exceptions.lance.LanceNaoEncontradoException;
+import br.gov.sp.fatec.lp2.exceptions.lance.ProdutoNaoAssociadoException;
 import br.gov.sp.fatec.lp2.mapper.LanceMapper;
 import br.gov.sp.fatec.lp2.repository.ClienteRepository;
 import br.gov.sp.fatec.lp2.repository.DispositivoRepository;
@@ -39,7 +41,6 @@ public class LanceService {
         List<Lance> lances = lancesDTO.stream()
                 .map(lanceDTO -> {
                     Lance lance = LanceMapper.INSTANCE.toEntity(lanceDTO);
-
                     lance.setDataHora(LocalDateTime.now());
 
                     Cliente cliente = clienteRepository.findById(lanceDTO.getClienteId())
@@ -47,7 +48,7 @@ public class LanceService {
                     lance.setCliente(cliente);
 
                     if (lanceDTO.getVeiculoId() == null && lanceDTO.getDispositivoId() == null) {
-                        throw new IllegalArgumentException("É necessário associar um Veículo ou Dispositivo ao lance");
+                        throw new ProdutoNaoAssociadoException();
                     }
 
                     if (lanceDTO.getVeiculoId() != null) {
@@ -76,9 +77,9 @@ public class LanceService {
     public List<LanceHistoricoDTO> buscarHistoricoDeLances(Long produtoId, String tipoProduto) {
         List<Lance> lances;
 
-        if (tipoProduto.equalsIgnoreCase("DISPOSITIVO")) {
+        if ("DISPOSITIVO".equalsIgnoreCase(tipoProduto)) {
             lances = lanceRepository.findByDispositivoId(produtoId);
-        } else if (tipoProduto.equalsIgnoreCase("VEICULO")) {
+        } else if ("VEICULO".equalsIgnoreCase(tipoProduto)) {
             lances = lanceRepository.findByVeiculoId(produtoId);
         } else {
             throw new IllegalArgumentException("Tipo de produto inválido");
@@ -92,7 +93,7 @@ public class LanceService {
                     dto.setValor(lance.getValor());
                     dto.setClienteNome(lance.getCliente().getNome());
                     dto.setProdutoDescricao(
-                            tipoProduto.equalsIgnoreCase("DISPOSITIVO") ?
+                            "DISPOSITIVO".equalsIgnoreCase(tipoProduto) ?
                                     lance.getDispositivo().getNome() :
                                     lance.getVeiculo().getModelo());
                     dto.setProdutoTipo(tipoProduto.toUpperCase());
@@ -102,7 +103,8 @@ public class LanceService {
     }
 
     public Optional<LanceDTO> buscarLance(Long id) {
-        return lanceRepository.findById(id)
-                .map(LanceMapper.INSTANCE::toDTO);
+        return Optional.ofNullable(lanceRepository.findById(id)
+                .map(LanceMapper.INSTANCE::toDTO)
+                .orElseThrow(() -> new LanceNaoEncontradoException(id)));
     }
 }

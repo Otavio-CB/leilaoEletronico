@@ -2,6 +2,7 @@ package br.gov.sp.fatec.lp2.service;
 
 import br.gov.sp.fatec.lp2.entity.InstituicaoFinanceira;
 import br.gov.sp.fatec.lp2.entity.dto.InstituicaoFinanceiraDTO;
+import br.gov.sp.fatec.lp2.exceptions.instituicaofinanceira.InstituicaoFinanceiraNaoEncontradaException;
 import br.gov.sp.fatec.lp2.mapper.InstituicaoFinanceiraMapper;
 import br.gov.sp.fatec.lp2.repository.InstituicaoFinanceiraRepository;
 import jakarta.inject.Inject;
@@ -28,17 +29,18 @@ public class InstituicaoFinanceiraService {
     }
 
     public Optional<InstituicaoFinanceiraDTO> buscarInstituicaoFinanceira(Long id) {
-        return instituicaoFinanceiraRepository.findById(id)
-                .map(InstituicaoFinanceiraMapper.INSTANCE::toDTO);
+        return Optional.ofNullable(instituicaoFinanceiraRepository.findById(id)
+                .map(InstituicaoFinanceiraMapper.INSTANCE::toDTO)
+                .orElseThrow(() -> new InstituicaoFinanceiraNaoEncontradaException(id)));
     }
 
     public Optional<InstituicaoFinanceiraDTO> atualizarInstituicaoFinanceira(Long id, InstituicaoFinanceiraDTO instituicaoFinanceiraDTO) {
-        return instituicaoFinanceiraRepository.findById(id).map(instituicaoExistente -> {
+        return Optional.ofNullable(instituicaoFinanceiraRepository.findById(id).map(instituicaoExistente -> {
             InstituicaoFinanceira instituicao = InstituicaoFinanceiraMapper.INSTANCE.toEntity(instituicaoFinanceiraDTO);
             instituicao.setId(id);
             InstituicaoFinanceira atualizado = instituicaoFinanceiraRepository.update(instituicao);
             return InstituicaoFinanceiraMapper.INSTANCE.toDTO(atualizado);
-        });
+        }).orElseThrow(() -> new InstituicaoFinanceiraNaoEncontradaException(id)));
     }
 
     public boolean removerInstituicaoFinanceira(Long id) {
@@ -47,6 +49,6 @@ public class InstituicaoFinanceiraService {
             instituicaoFinanceiraRepository.deleteById(id);
             return true;
         }
-        return false;
+        throw new InstituicaoFinanceiraNaoEncontradaException(id);
     }
 }

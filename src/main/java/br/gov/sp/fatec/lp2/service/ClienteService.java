@@ -2,6 +2,9 @@ package br.gov.sp.fatec.lp2.service;
 
 import br.gov.sp.fatec.lp2.entity.Cliente;
 import br.gov.sp.fatec.lp2.entity.dto.ClienteDTO;
+import br.gov.sp.fatec.lp2.exceptions.cliente.ClienteNaoEncontradoException;
+import br.gov.sp.fatec.lp2.exceptions.cliente.ErroAtualizacaoClienteException;
+import br.gov.sp.fatec.lp2.exceptions.cliente.ErroRemocaoClienteException;
 import br.gov.sp.fatec.lp2.mapper.ClienteMapper;
 import br.gov.sp.fatec.lp2.repository.ClienteRepository;
 import io.micronaut.context.annotation.Requires;
@@ -12,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Requires(beans = ClienteRepository.class)
 @Singleton
 public class ClienteService {
 
@@ -30,25 +32,34 @@ public class ClienteService {
     }
 
     public Optional<ClienteDTO> buscarCliente(Long id) {
-        return clienteRepository.findById(id)
-                .map(ClienteMapper.INSTANCE::toDTO);
+        return Optional.ofNullable(clienteRepository.findById(id)
+                .map(ClienteMapper.INSTANCE::toDTO)
+                .orElseThrow(() -> new ClienteNaoEncontradoException(id)));
     }
 
     public Optional<ClienteDTO> atualizarCliente(Long id, ClienteDTO clienteDTO) {
-        return clienteRepository.findById(id).map(clienteExistente -> {
+        return Optional.ofNullable(clienteRepository.findById(id).map(clienteExistente -> {
             Cliente cliente = ClienteMapper.INSTANCE.toEntity(clienteDTO);
             cliente.setId(id);
-            Cliente atualizado = clienteRepository.update(cliente);
-            return ClienteMapper.INSTANCE.toDTO(atualizado);
-        });
+            try {
+                Cliente atualizado = clienteRepository.update(cliente);
+                return ClienteMapper.INSTANCE.toDTO(atualizado);
+            } catch (Exception e) {
+                throw new ErroAtualizacaoClienteException(e.getMessage());
+            }
+        }).orElseThrow(() -> new ClienteNaoEncontradoException(id)));
     }
 
     public boolean removerCliente(Long id) {
         Optional<Cliente> clienteOpt = clienteRepository.findById(id);
         if (clienteOpt.isPresent()) {
-            clienteRepository.deleteById(id);
-            return true;
+            try {
+                clienteRepository.deleteById(id);
+                return true;
+            } catch (Exception e) {
+                throw new ErroRemocaoClienteException(id);
+            }
         }
-        return false;
+        throw new ClienteNaoEncontradoException(id);
     }
 }

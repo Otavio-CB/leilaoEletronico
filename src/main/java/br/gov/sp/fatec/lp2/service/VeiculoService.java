@@ -3,6 +3,10 @@ package br.gov.sp.fatec.lp2.service;
 import br.gov.sp.fatec.lp2.entity.Leilao;
 import br.gov.sp.fatec.lp2.entity.Veiculo;
 import br.gov.sp.fatec.lp2.entity.dto.VeiculoDTO;
+import br.gov.sp.fatec.lp2.exceptions.leilao.LeilaoNaoEncontradoException;
+import br.gov.sp.fatec.lp2.exceptions.leilao.LeilaoOcorridoException;
+import br.gov.sp.fatec.lp2.exceptions.veiculo.VeiculoNaoEncontradoException;
+import br.gov.sp.fatec.lp2.exceptions.veiculo.VeiculoVendidoException;
 import br.gov.sp.fatec.lp2.mapper.VeiculoMapper;
 import br.gov.sp.fatec.lp2.repository.LeilaoRepository;
 import br.gov.sp.fatec.lp2.repository.VeiculoRepository;
@@ -25,7 +29,7 @@ public class VeiculoService {
 
     public List<VeiculoDTO> criarVeiculos(List<VeiculoDTO> veiculosDTO, Long leilaoId) {
         Leilao leilao = leilaoRepository.findById(leilaoId)
-                .orElseThrow(() -> new RuntimeException("Leilão não encontrado"));
+                .orElseThrow(() -> new LeilaoNaoEncontradoException(leilaoId));
 
         List<Veiculo> veiculos = veiculosDTO.stream()
                 .map(veiculoDTO -> {
@@ -37,7 +41,7 @@ public class VeiculoService {
 
         veiculos = veiculoRepository.saveAll(veiculos);
         return veiculos.stream()
-                .map(veiculo -> VeiculoMapper.INSTANCE.toDTO(veiculo))
+                .map(VeiculoMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -55,7 +59,6 @@ public class VeiculoService {
         });
     }
 
-
     public boolean removerVeiculo(Long id) {
         Optional<Veiculo> veiculoOpt = veiculoRepository.findById(id);
         if (veiculoOpt.isPresent()) {
@@ -67,17 +70,17 @@ public class VeiculoService {
 
     public VeiculoDTO reassociarVeiculo(Long id, Long novoLeilaoId) {
         Veiculo veiculo = veiculoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
+                .orElseThrow(() -> new VeiculoNaoEncontradoException(id));
 
         if (veiculo.isVendido()) {
-            throw new RuntimeException("Não é possível reassociar um veículo vendido");
+            throw new VeiculoVendidoException("Não é possível reassociar o veículo com ID " + id + " pois já foi vendido");
         }
 
         Leilao novoLeilao = leilaoRepository.findById(novoLeilaoId)
-                .orElseThrow(() -> new RuntimeException("Novo leilão não encontrado"));
+                .orElseThrow(() -> new LeilaoNaoEncontradoException(novoLeilaoId));
 
         if (novoLeilao.getDataOcorrencia().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("O novo leilão já ocorreu");
+            throw new LeilaoOcorridoException();
         }
 
         veiculo.setLeilao(novoLeilao);
