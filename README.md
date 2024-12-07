@@ -31,7 +31,17 @@ Responsáveis por expor os endpoints da API:
 
 ---
 
-### **Camadas Principais com Exceptions e Handlers**
+### ⬇️ Seção de Downloads
+
+Os arquivos com extensão `.det` são baixados automaticamente pela aplicação e armazenados na pasta de destino padrão, que é:
+
+```plaintext
+/resources/det
+```
+
+---
+
+### 📂  Camadas Principais
 
 - **Controller**:  
   Expõe os endpoints para interação com os usuários ou sistemas externos. É responsável por receber as requisições, processar os dados básicos e chamar as camadas de serviço.
