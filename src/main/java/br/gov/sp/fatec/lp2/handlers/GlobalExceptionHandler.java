@@ -16,7 +16,9 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Singleton;
+import lombok.Getter;
 
 @Produces
 @Singleton
@@ -49,6 +51,8 @@ public class GlobalExceptionHandler implements ExceptionHandler<RuntimeException
         return HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.getCode(), "Erro inesperado: " + exception.getMessage()));
     }
 
+    @Getter
+    @Serdeable
     static class ErrorResponse {
         private final int status;
         private final String message;
@@ -58,12 +62,5 @@ public class GlobalExceptionHandler implements ExceptionHandler<RuntimeException
             this.message = message;
         }
 
-        public int getStatus() {
-            return status;
-        }
-
-        public String getMessage() {
-            return message;
-        }
     }
 }

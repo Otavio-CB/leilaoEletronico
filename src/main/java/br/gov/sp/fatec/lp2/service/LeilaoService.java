@@ -4,6 +4,7 @@ import br.gov.sp.fatec.lp2.entity.*;
 import br.gov.sp.fatec.lp2.entity.dto.*;
 import br.gov.sp.fatec.lp2.entity.enums.StatusLeilao;
 import br.gov.sp.fatec.lp2.exceptions.instituicaofinanceira.InstituicaoFinanceiraNaoEncontradaException;
+import br.gov.sp.fatec.lp2.exceptions.leilao.LeilaoComAssociacoesException;
 import br.gov.sp.fatec.lp2.exceptions.leilao.LeilaoNaoEncontradoException;
 import br.gov.sp.fatec.lp2.mapper.*;
 import br.gov.sp.fatec.lp2.repository.*;
@@ -71,10 +72,18 @@ public class LeilaoService {
         });
     }
 
+    @Transactional
     public boolean removerLeilao(Long id) {
         if (!leilaoRepository.existsById(id)) {
             throw new LeilaoNaoEncontradoException(id);
         }
+
+        Leilao leilao = leilaoRepository.findById(id).orElseThrow(() -> new LeilaoNaoEncontradoException(id));
+
+        if (!leilao.getDispositivos().isEmpty() || !leilao.getVeiculos().isEmpty()) {
+            throw new LeilaoComAssociacoesException(id);
+        }
+
         leilaoRepository.deleteById(id);
         return true;
     }
