@@ -84,25 +84,7 @@ git clone https://github.com/Otavio-CB/leilaoEletronico.git
 cd leilaoEletronico
 ```
 
-### **2. Instalar Dependências**
-
-```bash
-./gradlew build
-```
-
-### **3. Configurar o Banco de Dados**
-
-Certifique-se de configurar as credenciais do banco de dados no arquivo `application.yml`:
-
-```yaml
-datasources:
-  default:
-    url: jdbc:mysql://localhost:3306/leilao_eletronico
-    username: root
-    password: admin123
-```
-
-### **4. Executar o Projeto**
+### **2. Executar o Projeto**
 
 ```bash
 ./gradlew run
