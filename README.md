@@ -31,16 +31,37 @@ Responsáveis por expor os endpoints da API:
 
 ---
 
-### **Camadas Principais**
+### **Camadas Principais com Exceptions e Handlers**
 
-- **Controller**: Expõe os endpoints para interação com os usuários ou sistemas externos.
-- **Service**: Implementa as regras de negócio e lógica da aplicação.
-- **Repository**: Realiza as operações de persistência no banco de dados.
-- **Models**: Contém as entidades representadas no sistema.
-- **DTOs**: Objetos para transferência de dados entre as camadas da aplicação.
-- **Enums**: Define valores constantes e categóricos usados no sistema.
-- **Mapper**: Responsável por converter objetos entre diferentes camadas (ex.: de Model para DTO e vice-versa).
-- **Utils**: Contém classes utilitárias e funções de apoio reutilizáveis no projeto.
+- **Controller**:  
+  Expõe os endpoints para interação com os usuários ou sistemas externos. É responsável por receber as requisições, processar os dados básicos e chamar as camadas de serviço.
+
+- **Service**:  
+  Implementa as regras de negócio e lógica da aplicação. Trata os dados recebidos dos controllers e delega operações de persistência para a camada de repositório.
+
+- **Repository**:  
+  Realiza as operações de persistência no banco de dados. Fornece uma interface para interagir com os dados de maneira eficiente e segura.
+
+- **Models**:  
+  Contém as entidades representadas no sistema. Essas classes refletem as tabelas do banco de dados ou objetos essenciais do domínio.
+
+- **DTOs**:  
+  Objetos para transferência de dados entre as camadas da aplicação, evitando expor diretamente as entidades.
+
+- **Enums**:  
+  Define valores constantes e categóricos usados no sistema, como estados, tipos e categorias, promovendo consistência.
+
+- **Mapper**:  
+  Responsável por converter objetos entre diferentes camadas (por exemplo, de Model para DTO e vice-versa). Pode usar bibliotecas como MapStruct ou modelMapper.
+
+- **Utils**:  
+  Contém classes utilitárias e funções de apoio reutilizáveis no projeto, como manipuladores de strings, geradores de IDs, validações genéricas etc.
+
+- **Exceptions**:  
+  Define as exceções personalizadas do sistema. Essa camada organiza erros específicos que podem ocorrer no domínio da aplicação.
+
+- **Handlers**:  
+  Contém classes responsáveis por capturar e processar exceções que ocorrem em toda a aplicação.
 
 --- 
 
